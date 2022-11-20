@@ -4,25 +4,37 @@
     <div class="position-sticky pt-3 sidebar-sticky">
         <ul class="nav flex-column">
             <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">
+                <a class="nav-link active" aria-current="page" href="{% url 'dashboard:home' %}">
                     <span data-feather="home" class="align-text-bottom"></span>
                     Dashboard
                 </a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">
+            {% comment %} <li class="nav-item">
+                <a class="nav-link" href="{% url 'expenses:expenses' %}">
                     <span data-feather="file" class="align-text-bottom"></span>
                     Expense
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">
-                    <span data-feather="shopping-cart" class="align-text-bottom"></span>
+                <a class="nav-link" href="{% url 'incomes:incomes' %}">
+                    <span data-feather="dollar-sign" class="align-text-bottom"></span>
                     Income
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="{% url 'purchases:purchases' %}">
+                    <span data-feather="file-plus" class="align-text-bottom"></span>
+                    Purchases
+                </a>
+            </li> {% endcomment %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'sales:sales' %}">
+                    <span data-feather="shopping-cart" class="align-text-bottom"></span>
+                    Sales
+                </a>
+            </li>
+            {% comment %} <li class="nav-item">
+                <a class="nav-link" href="{% url 'incomes:incomes' %}">
                     <span data-feather="users" class="align-text-bottom"></span>
                     Customers
                 </a>
@@ -32,25 +44,38 @@
                     <span data-feather="bar-chart-2" class="align-text-bottom"></span>
                     Reports
                 </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">
-                    <span data-feather="layers" class="align-text-bottom"></span>
-                    Integrations
-                </a>
-            </li>
+            </li> {% endcomment %}
+
+            <div class="accordion accordion-flush">
+                <li class="nav-item accordion-header">
+                    <a class="collapsed accordion-button nav-link" aria-expanded="false" role="button" data-bs-toggle="collapse" data-bs-target="#chapter-1">
+                        <span data-feather="layers" class="align-text-bottom"></span>
+                        Inventory
+                    </a>
+                    <div id="chapter-1" class="accordion-collapse collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                        <div class="accordion-body">
+                            <a class="nav-link" href="{% url 'inventory:inventory' %}">Inventory Dashboard</a>
+                            <a class="nav-link" href="{% url 'inventory:finished_goods' %}">Finished Goods</a>
+                            <a class="nav-link" href="{% url 'inventory:raw_materials' %}">Raw Materials</a>
+                            <a class="nav-link" href="{% url 'inventory:inventory_history' %}">Inventory History</a>
+                        </div>
+                    </div>
+                    
+                </li>
+            </div>
+
         </ul>
 
         <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted text-uppercase">
-            <span>Saved reports</span>
+            <span>Summary</span>
             <a class="link-secondary" href="#" aria-label="Add a new report">
                 <span data-feather="plus-circle" class="align-text-bottom"></span>
             </a>
         </h6>
 
         <ul class="nav flex-column mb-2">
-            <li class="nav-item">
-                <a class="nav-link" href="#">
+            {% comment %} <li class="nav-item">
+                <a class="nav-link" href="{% url 'expenses:summary_expense' %}">
                     <span data-feather="file-text" class="align-text-bottom"></span>
                     Expense Summary
                 </a>
@@ -60,19 +85,35 @@
                     <span data-feather="file-text" class="align-text-bottom"></span>
                     Income Summary
                 </a>
-            </li>
+            </li> {% endcomment %}
             <li class="nav-item">
                 <a class="nav-link" href="#">
                     <span data-feather="file-text" class="align-text-bottom"></span>
-                    Social engagement
+                    Inventory Summary
                 </a>
             </li>
+        </ul>
+
+        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted text-uppercase">
+            <span>Settings</span>
+            <a class="link-secondary" href="#" aria-label="Add a new report">
+                <span data-feather="plus-circle" class="align-text-bottom"></span>
+            </a>
+        </h6>
+
+        <ul class="nav flex-column mb-2">
             <li class="nav-item">
+                <a class="nav-link" href="{% url 'preferences' %}">
+                    <span data-feather="file-text" class="align-text-bottom"></span>
+                    General
+                </a>
+            </li>
+            {% comment %} <li class="nav-item">
                 <a class="nav-link" href="#">
                     <span data-feather="file-text" class="align-text-bottom"></span>
-                    Year-end sale
+                    Account
                 </a>
-            </li>
+            </li> {% endcomment %}
         </ul>
     </div>
 </nav>

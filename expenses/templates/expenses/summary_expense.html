@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="container mt-3">
+    {% include 'partials/_messages.html' %}
+    <div class="row">
+        <div class="col-md-9">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="">Expense Summary</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Sumarry</li>
+                </ol>
+            </nav>
+        </div>
+
+        <canvas id="myChart" width="400" height="400"></canvas>
+    
+
+    </div>
+
+    
+    
+</div>
+
+
+
+<script src="{% static 'js/summary_expense.js' %}"></script>
+
+{% endblock content %}

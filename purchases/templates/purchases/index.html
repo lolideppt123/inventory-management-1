@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% load static %}{% load humanize %}
+{% block content %}
+
+
+<div class="container mt-3">
+    {% include 'partials/_messages.html' %}
+    <div class="row">
+        <div class="col-md-9">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="">Purchases</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">My Purchases</li>
+                </ol>
+            </nav>
+        </div>
+
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <input type="text" class="form-control" id="searchText" placeholder="Search" name="searchText" />
+                </div>
+            </div>
+
+            <div class="btn-toolbar mb-2 mb-md-0">
+				<div class="btn-group me-2">
+					<div class="btn-group">
+						<button class="btn btn-secondary dropdown-toggle" type="button" id="defaultDropdown" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
+							Export
+						</button>
+						<ul class="dropdown-menu" aria-labelledby="defaultDropdown">
+						  <li><a href="#" class="dropdown-item">CSV</a></li>
+						  <li><a href="#" class="dropdown-item">Excel</a></li>
+						  {% comment %} <li><a href="{% url 'expenses:export_pdf' %}" class="dropdown-item">PDF</a></li> {% endcomment %}
+						</ul>
+					</div>
+				</div>
+				<div class="btn-group me-5">
+					<a href="{% url 'purchases:add_purchase' %}" class="btn btn-primary">Add Purchase</a>
+				</div>
+            </div>
+        </div>
+
+        <div class="container">
+
+            {% if purchases.count %}
+            <div class="app-table">
+                <table class="table table-striped table-hover table-sm">
+                    <thead>
+                        <tr>
+                            <th>Product Name</th>
+                            <th>Purchase Date</th>
+                            <th>Details</th>
+                            <th>Origin</th>
+                            <th>Quantity</th>
+                            <th>Unit Cost</th>
+                            <th>Total Cost</th>
+                            {% comment %} <th>{{request.user.currency}}</th> {% endcomment %}
+                        </tr>
+                    </thead>
+                    
+                    <tbody>
+                        {% for purchase in page_obj %}
+                        <tr>
+                            <td>{{purchase.product_name}}</td>
+                            <td>{{purchase.purchase_date|date:'Y-m-d'}}</td>
+                            <td>{{purchase.details}}</td>
+                            <td>{{purchase.origin}}</td>
+                            <td>{{purchase.purchase_quantity|intcomma}}</td>
+                            <td>{{purchase.product_unit}}</td>
+                            <td>{{purchase.unit_cost|intcomma}}</td>
+                            <td>{{purchase.total_cost|intcomma}}</td>
+                            {% comment %} <td><a href="#" class="btn btn-secondary btn-sm">Edit</a></td> {% endcomment %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    
+                </table>
+            </div>
+            {% endif %}
+        </div>
+
+    </div>
+</div>
+
+
+{% endblock content %}

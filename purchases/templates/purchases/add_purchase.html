@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% comment %} <h1>Add Expense</h1> {% endcomment %}
+<div class="container mt-4">
+    
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'purchases:purchases' %}">Purchase</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Add Purchase</li>
+        </ol>
+    </nav>
+    {% include 'partials/_messages.html' %}
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="rounded shadow p-5">
+                <form action="{% url 'purchases:add_purchase' %}" method="POST">
+                    {% csrf_token %}
+                    <div class="form-group mb-2">
+                        <label for="">Product Name</label>
+                        <input type="text" class="form-control form-control-sm" id="product_name" name="product_name" value="{{values.product_name}}" required/>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="">Purchase Date</label>
+                        <input type="date" class="form-control form-control-sm" id="purchase_date" name="purchase_date" max="{{max_date}}" value="{{values.purchase_date}}" required/>
+                    </div>
+
+                    <div class="form-group mb-2">
+                        <label for="">Details</label>
+                        <input type="text" class="form-control form-control-sm" id="details" name="details" value="{{values.details}}" required/>
+                    </div>
+
+                    <div class="form-group mb-2">
+                        <label for="">Origin</label>
+                        <select class="form-select" name="origin" id="origin" >
+                            {% for origin in origins %}
+                                {% if category.name == 'Choose...' %}
+                                    <option name="origin" value="{{origin}}" selected>{{origin}}</option>
+                                {% else %}
+                                    <option name="origin" value="{{origin}}">{{origin}}</option>
+                                {% endif %}
+                            {% endfor %} 
+                        </select>
+                    </div>
+
+                    <div class="form-group mb-2">
+                        <label for="">Quantity</label>
+                        <input type="number" class="form-control form-control-sm" id="quantity" name="quantity" value="{{values.quantity}}" step="0.01" required/>
+                    </div>
+
+                    <div class="form-group mb-2">
+                        <label for="">Unit</label>
+                        <select class="form-select" name="product_unit" id="product_unit" >
+                            {% for product_unit in product_units %}
+                                {% if category.name == 'Choose...' %}
+                                    <option name="product_unit" value="{{product_unit}}" selected>{{product_unit}}</option>
+                                {% else %}
+                                    <option name="product_unit" value="{{product_unit}}">{{product_unit}}</option>
+                                {% endif %}
+                            {% endfor %} 
+                        </select>
+                    </div>
+
+                    <div class="form-group mb-2">
+                        <label for="">Unit</label>
+                        <input type="text" class="form-control form-control-sm" id="unit" name="unit" value="" required/>
+                    </div>
+
+                    <div class="form-group mb-2">
+                        <label for="">Unit Cost</label>
+                        <input type="number" class="form-control form-control-sm" id="unit_cost" name="unit_cost" value="{{values.unit_cost}}" step="0.01" required/>
+                    </div>
+
+                    <div class="form-group mb-2">
+                        <label for="">Total Cost</label>
+                        <input type="number" class="form-control form-control-sm" id="total_cost" name="total_cost" value="{{values.total_cost}}" step="0.01" required/>
+                    </div>
+                    
+                    <input type="submit" value="Submit" class="btn btn-primary btn-primary-sm" />
+                </form>
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+{% endblock content %}

@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% load static %} {% load humanize %}
+{% block content %}
+
+<link href="{% static 'css/finished_goods.css' %}" rel="stylesheet">
+
+<div class="container mt-3">
+    {% include 'partials/_messages.html' %}
+    <div class="row">
+        <div class="col-md-9">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'inventory:inventory' %}">Inventory</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Finished Goods</li>
+                </ol>
+            </nav>
+        </div>
+
+
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <input type="text" class="form-control" id="searchText" placeholder="Search" name="searchText" />
+                </div>
+            </div>
+
+            <div class="btn-toolbar mb-2 mb-md-0">
+				<div class="btn-group me-2">
+					<div class="btn-group">
+						<button class="btn btn-secondary dropdown-toggle" type="button" id="defaultDropdown" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
+							Export
+						</button>
+						<ul class="dropdown-menu" aria-labelledby="defaultDropdown">
+                            <li><a href="" class="dropdown-item">CSV</a></li>
+                            <li><a href="" class="dropdown-item">Excel</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="btn-group me-5">
+					{% comment %} <a href="{% url 'inventory:add_finished_goods' %}" class="btn btn-primary">Add Finished Goods</a> {% endcomment %}
+				</div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="container">
+        {% if inventory_data %}
+        
+        <div class="app-table">
+            <table class="table table-striped table-hover table-sm">
+                <thead>
+                    <tr>
+                        <th>Last Updated</th>
+                        <th>Product Name</th>
+                        <th>Quantity</th>
+                        <th></th>
+                        <th>Unit</th>
+                        <th>Inv type</th>
+                    </tr>
+                </thead>
+                
+                <tbody>
+                    {% comment %} {% for inv in page_obj %} {% endcomment %}
+                    {% for inv in inventory_data.values %}
+                    <tr>
+                        <td>{{inv.0}}</td>
+                        <td>{{inv.1}}</td>
+                        <td>
+                            <div class="progress" style="height: 20px;">
+                                <div class="progress-bar bg-{{inv.5}}" role="progressbar" style="width: 50%">
+                                    <span>{{inv.2|intcomma}}</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td></td>
+                        <td>{{inv.3|intcomma}}</td>
+                        <td>{{inv.4}}</td>
+                        {% comment %} <td><a href={% url 'expenses:edit_expense' expense.id %} class="btn btn-secondary btn-sm">Edit</a></td> {% endcomment %}
+                    </tr>
+                    {% endfor %}
+                    {% comment %} {% endfor %} {% endcomment %}
+                </tbody>
+                
+            </table>
+
+            {% for i in current_inv %}
+                <p>{{i.message}}</p>
+            {% endfor %} 
+            
+
+            <div class="pagination-container">
+                <nav>
+                    <ul class="pagination pagination-sm justify-content-end">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item"><a class="page-link" href="?page=1">&laquo First</a></li>
+                        <li class="page-item"><a class="page-link" href="?page={{page_obj.previous_page_number}}">Previous</a></li>
+                    {% else %}
+                        <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1" aria-disabled="true">&laquo First</a></li>
+                        <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a></li>
+                    {% endif %}
+                    <li class="page-item disabled"><a class="page-link" aria-disabled="true" href="#">Page {{page_obj.number}} of {{page_obj.paginator.num_pages}}</a></li>
+                    {% if page_obj.has_next %}
+                        <li class="page-item"><a class="page-link" href="?page={{page_obj.next_page_number}}">Next</a></li>
+                        <li class="page-item"><a class="page-link" href="?page={{page_obj.paginator.num_pages}}">Last &raquo</a></li>
+                    {% else %}
+                    <li class="page-item disabled"><a class="page-link" href="" tabindex="-1" aria-disabled="true">Next</a></li>
+                    <li class="page-item disabled"><a class="page-link" href="" tabindex="-1" aria-disabled="true">Last &raquo</a></li>
+                    {% endif %}
+                    </ul>
+                </nav>
+            </div>
+        </div>
+        {% endif %}
+
+        
+    </div>
+</div>
+
+<script src="{% static 'js/inventory.js' %}"></script>
+
+{% endblock content %}

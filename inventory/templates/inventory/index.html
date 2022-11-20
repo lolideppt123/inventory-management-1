@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %} {% load humanize %}
+{% block content %}
+
+
+<div class="container mt-3">
+    {% include 'partials/_messages.html' %}
+    <div class="row">
+        <div class="col-md-9">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'inventory:inventory' %}">Inventory</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">My Inventory</li>
+                </ol>
+            </nav>
+        </div>
+
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <input type="text" class="form-control" id="searchText" placeholder="Search" name="searchText" />
+                </div>
+            </div>
+
+            <div class="btn-toolbar mb-2 mb-md-0">
+				<div class="btn-group me-2">
+					<div class="btn-group">
+						<button class="btn btn-secondary dropdown-toggle" type="button" id="defaultDropdown" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
+							Export
+						</button>
+						<ul class="dropdown-menu" aria-labelledby="defaultDropdown">
+                            <li><a href="" class="dropdown-item">CSV</a></li>
+                            <li><a href="" class="dropdown-item">Excel</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="btn-group me-5">
+					<a href="{% url 'inventory:add_inventory' %}" class="btn btn-primary">Add Inventory Item</a>
+				</div>
+            </div>
+        </div>
+
+        <div class="container">
+            {% if inventories.count %}
+            
+            {% endif %}
+        </div>
+
+    </div>
+</div>
+
+{% endblock content %}

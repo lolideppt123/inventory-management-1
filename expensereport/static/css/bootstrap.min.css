@@ -3358,7 +3358,7 @@ fieldset:disabled .btn {
     --bs-btn-border-color: #e9ecef;
     --bs-btn-hover-color: #000;
     --bs-btn-hover-bg: #eceff1;
-    --bs-btn-hover-border-color: #ebeef1;
+    --bs-btn-hover-border-color: #6c757d;
     --bs-btn-focus-shadow-rgb: 198, 201, 203;
     --bs-btn-active-color: #000;
     --bs-btn-active-bg: #edf0f2;
@@ -3489,11 +3489,11 @@ fieldset:disabled .btn {
 }
 
 .btn-outline-secondary {
-    --bs-btn-color: #e9ecef;
-    --bs-btn-border-color: #e9ecef;
+    --bs-btn-color: #6c757d;
+    --bs-btn-border-color: #6c757d;
     --bs-btn-hover-color: #000;
-    --bs-btn-hover-bg: #e9ecef;
-    --bs-btn-hover-border-color: #e9ecef;
+    --bs-btn-hover-bg: #6c757d;
+    --bs-btn-hover-border-color: #6c757d;
     --bs-btn-focus-shadow-rgb: 233, 236, 239;
     --bs-btn-active-color: #000;
     --bs-btn-active-bg: #e9ecef;
@@ -3504,6 +3504,12 @@ fieldset:disabled .btn {
     --bs-btn-disabled-border-color: #e9ecef;
     --bs-gradient: none
 }
+
+/* .btn-outline-secondary:hover {
+    color: #fff;
+    background-color: #6c757d;
+    border-color: #6c757d
+} */
 
 .btn-outline-success {
     --bs-btn-color: #73a839;
@@ -3734,7 +3740,7 @@ fieldset:disabled .btn {
     --bs-dropdown-box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
     --bs-dropdown-link-color: #495057;
     --bs-dropdown-link-hover-color: #fff;
-    --bs-dropdown-link-hover-bg: #2fa4e7;
+    --bs-dropdown-link-hover-bg: #6c757d;
     --bs-dropdown-link-active-color: #fff;
     --bs-dropdown-link-active-bg: #2fa4e7;
     --bs-dropdown-link-disabled-color: #adb5bd;
@@ -5000,11 +5006,11 @@ fieldset:disabled .btn {
     --bs-accordion-btn-padding-y: 1rem;
     --bs-accordion-btn-color: var(--bs-body-color);
     --bs-accordion-btn-bg: var(--bs-accordion-bg);
-    --bs-accordion-btn-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='var%28--bs-body-color%29'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+    --bs-accordion-btn-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 16' fill='var%28--bs-body-color%29'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
     --bs-accordion-btn-icon-width: 1.25rem;
     --bs-accordion-btn-icon-transform: rotate(-180deg);
     --bs-accordion-btn-icon-transition: transform 0.2s ease-in-out;
-    --bs-accordion-btn-active-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%232a94d0'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+    --bs-accordion-btn-active-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 16' fill='%232a94d0'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
     --bs-accordion-btn-focus-border-color: #97d2f3;
     --bs-accordion-btn-focus-box-shadow: 0 0 0 0.25rem rgba(47, 164, 231, 0.25);
     --bs-accordion-body-padding-x: 1.25rem;
@@ -5014,9 +5020,9 @@ fieldset:disabled .btn {
 }
 
 .accordion-button {
-    position: relative;
+    /* position: relative; */
     display: flex;
-    align-items: center;
+    /* align-items: center;
     width: 100%;
     padding: var(--bs-accordion-btn-padding-y) var(--bs-accordion-btn-padding-x);
     font-size: 1rem;
@@ -5026,7 +5032,15 @@ fieldset:disabled .btn {
     border: 0;
     border-radius: 0;
     overflow-anchor: none;
-    transition: var(--bs-accordion-transition)
+    transition: var(--bs-accordion-transition) 
+    ---------------------
+    display: block;*/
+    padding: var(--bs-nav-link-padding-y) var(--bs-nav-link-padding-x);
+    font-size: var(--bs-nav-link-font-size);
+    font-weight: var(--bs-nav-link-font-weight);
+    color: var(--bs-nav-link-color);
+    text-decoration: none;
+    transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out
 }
 
 @media (prefers-reduced-motion:reduce) {
@@ -5375,8 +5389,8 @@ fieldset:disabled .btn {
 
 .alert-info {
     --bs-alert-color: #022445;
-    --bs-alert-bg: #cdd8e3;
-    --bs-alert-border-color: #b3c5d5
+    --bs-alert-bg: #d1ecf1;
+    --bs-alert-border-color: #bee5eb
 }
 
 .alert-info .alert-link {
@@ -12834,4 +12848,9 @@ fieldset:disabled .btn {
 .badge.bg-light,
 .badge.bg-secondary {
     color: #343a40
+}
+
+/* Joseph Custom CSS */
+ol {
+    padding-left: .5rem !important;
 }

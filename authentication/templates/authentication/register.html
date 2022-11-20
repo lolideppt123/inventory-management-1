@@ -1,13 +1,68 @@
 
 
 {% extends 'base_auth.html' %}
+{% load static %}
 
 {% block content %}
 
-<div class="card">
-    <div class="card-body">
-        <h1>Login</h1>
+<div class="row">
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
+        <div class="card mt-5">
+            <div class="card-body">
+
+                <div class="card-title py-3">
+                    <h4>Register for a free account</h4>
+                </div>
+
+                <form action="{% url 'register' %}" method="post" id="registrationForm">
+                    {% csrf_token %}
+                    {% include 'partials/_messages.html' %}
+                    <div class="mb-2">
+                        <label for="firstnameField" class="form-label">First Name</label>
+                        <input placeholder="John" type="text" name="firstname" id="firstnameField" class="form-control" value="{{fieldValues.firstname}}" required />
+                    </div>
+                    <div class="firstname-feedback invalid-feedback" style="display:none;"></div>
+                    
+                    <div class="mb-2">
+                        <label for="lastnameField" class="form-label">Last Name</label>
+                        <input placeholder="Doe" type="text" name="lastname" id="lastnameField" class="form-control" value="{{fieldValues.lastname}}" required />
+                    </div>
+                    <div class="lastname-feedback invalid-feedback" style="display:none;"></div>
+
+                    <div class="mb-2">
+                        <label for="usernameField" class="form-label">Username</label>
+                        <input placeholder="Username" type="text" name="username" id="usernameField" class="form-control" value="{{fieldValues.username}}" required />
+                    </div>
+                    <div class="username-feedback invalid-feedback" style="display:none;"></div>
+
+                    <div class="mb-2">
+                        <label for="emailField" class="form-label">Email Address</label>
+                        <input type="email" class="form-control" value="{{fieldValues.email}}" required id="emailField" placeholder="name@example.com" name="email" />
+                    </div>
+                    <div class="email-feedback invalid-feedback" style="display:none;"></div>
+
+                    <div class="mb-2">
+                        <label for="passwordField" class="form-label">Password</label>
+                        <input placeholder="Password" type="password" name="password" id="passwordField" class="form-control" value="" required />
+                        <small class="float-end py-2 passwordToggle">SHOW</small>
+                    </div>
+                    <div class="password-feedback invalid-feedback" style="display:none;"></div>
+                    <div class="d-block-inline mb-2">
+                        <input type="submit" value="Register" class="btn input-block-level form-control btn-primary" >
+                        {% comment %} <button class="btn btn-primary" type="button">Button</button> {% endcomment %}
+                    </div>
+                    <div class="form-feedback invalid-feedback" style="display:none;"></div>
+                    
+                </form>
+                <span><a href="{% url 'login' %}">Already have an account?</a></span><br />
+            </div>
+
+        </div>
     </div>
+    <div class="col-md-4"></div>
 </div>
+
+<script src="{% static 'js/register.js' %}"></script>
 
 {% endblock content %}

@@ -1,1 +1,1 @@
-web: gunicorn expensereport.wsgi
+web: gunicorn expensereport.wsgi --log-file -
