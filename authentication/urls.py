@@ -4,8 +4,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
-    path('register/', views.RegistrationView.as_view(), name='register'),
-    path('login/', views.LoginView.as_view(), name='login'),
+    path('register/', csrf_exempt(views.RegistrationView.as_view()), name='register'),
+    path('login/', csrf_exempt(views.LoginView.as_view()), name='login'),
     path('logout/', views.LogoutView.as_view(), name='logout'),
     path('validate-firstname', csrf_exempt(views.FirstnameValidationView.as_view()), name="validate-firstname"),
     path('validate-lastname', csrf_exempt(views.LastnameValidationView.as_view()), name="validate-lastname"),
