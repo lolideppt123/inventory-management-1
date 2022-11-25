@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'inventory',
     'rest_framework', #Serializers
     'storages', #AWS S3 boto3
+    'corsheaders', #django header
 ]
 
 MIDDLEWARE = [
@@ -65,6 +66,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'expensereport.urls'
