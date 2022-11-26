@@ -1,6 +1,7 @@
 from django.urls import path
 from . import views
+from django.views.decorators.csrf import csrf_exempt
 
 urlpatterns = [
-    path('', views.IndexPage.as_view(), name='preferences')
+    path('', csrf_exempt(views.IndexPage.as_view()), name='preferences')
 ]
