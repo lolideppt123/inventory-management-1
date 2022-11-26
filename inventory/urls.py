@@ -8,7 +8,7 @@ urlpatterns = [
     path('', views.IndexPageView.as_view(), name='inventory'),
     path('raw-materials/', views.RawMaterialsView.as_view(), name='raw_materials'),
     path('finished-goods/', views.FinishedGoodsView.as_view(), name='finished_goods'),
-    path('add-inventory/', views.AddInventoryView.as_view(), name='add_inventory'),
+    path('add-inventory/', csrf_exempt(views.AddInventoryView.as_view()), name='add_inventory'),
     path('inventory-history/', csrf_exempt(views.InventoryHistoryView.as_view()), name='inventory_history'),
     
     # path('add_income', views.AddIncomeView.as_view(), name='add_income'),
