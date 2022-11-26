@@ -18,12 +18,6 @@ class IndexPageView(LoginRequiredMixin, View):
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
 
-        # exist = UserPreference.objects.filter(user=request.user).exists()
-        # if not exist:
-        #     UserPreference.objects.create(user=request.user, currency='CAD - Canadian Dollar')
-        # currency = UserPreference.objects.get(user=request.user).currency
-        print()
-
         context = {
             'sales': sales,
             'page_obj': page_obj,
