@@ -32,6 +32,7 @@ class InventoryType(models.Model):
 
 class CurrentTotalInventory(models.Model): # Try to get a date for last update_date
     owner = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    date = models.DateField(default=now, null=True)
     update_date = models.DateField(default=now, null=True)
     product_name = models.ForeignKey(sales_models.Products, on_delete=models.SET_NULL, null=True)
     current_inventory_quantity = models.DecimalField(decimal_places=2, max_digits=8, null=True)
@@ -40,6 +41,7 @@ class CurrentTotalInventory(models.Model): # Try to get a date for last update_d
 
     class Meta:
         verbose_name_plural = 'Current Total Inventories'
+        ordering = ['-update_date']
 
     def __str__(self):
         return str(self.product_name) or ""

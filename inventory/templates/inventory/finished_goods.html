@@ -52,6 +52,7 @@
                 <thead>
                     <tr>
                         <th>Last Updated</th>
+                        <th>Date</th>
                         <th>Product Name</th>
                         <th>Quantity</th>
                         <th></th>
@@ -65,6 +66,7 @@
                     {% for inv in page_obj %}
                     <tr>
                         <td>{{inv.update_date}}</td>
+                        <td>{{inv.date}}</td>
                         <td>{{inv.product_name}}</td>
                         <td>
                             <div class="progress" style="height: 20px;">

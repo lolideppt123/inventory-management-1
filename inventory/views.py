@@ -147,6 +147,7 @@ class AddInventoryView(LoginRequiredMixin, View):
         product_unit = ProductUnit.objects.get(name=request.POST['product_unit'])
         inv_date = request.POST['inv_date']
         inv_type = models.InventoryType.objects.get(name=request.POST['inv_type'])
+        today_date = datetime.date.today()
 
         context = {
             'values': request.POST,
@@ -186,7 +187,8 @@ class AddInventoryView(LoginRequiredMixin, View):
 
         obj, created = models.CurrentTotalInventory.objects.get_or_create(owner=request.user, product_name=product_name, inv_type=inv_type)
         obj.owner = request.user
-        obj.update_date = inv_date
+        obj.update_date = today_date
+        obj.date = inv_date
         obj.product_name = product_name
         obj.current_inventory_quantity = current_inventory_quantity
         obj.product_unit = product_unit

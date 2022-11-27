@@ -108,7 +108,8 @@ class AddSaleView(LoginRequiredMixin, View):
 
         obj, created = CurrentTotalInventory.objects.get_or_create(owner=request.user, product_name=product_name, inv_type=InventoryType.objects.get(name="Finished Goods"))
         obj.owner = request.user
-        obj.update_date = sales_date
+        obj.update_date = today_date
+        obj.date = sales_date
         obj.current_inventory_quantity = new_inventory_quantity
         obj.save()
 
