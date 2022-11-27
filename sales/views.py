@@ -112,9 +112,6 @@ class AddSaleView(LoginRequiredMixin, View):
         obj.current_inventory_quantity = new_inventory_quantity
         obj.save()
 
-        # import pdb
-        # pdb.set_trace()
-        
         Sales.objects.create(
             owner=request.user, 
             delivery_receipt=delivery_receipt, 
@@ -126,7 +123,6 @@ class AddSaleView(LoginRequiredMixin, View):
             product_unit=product_unit,
             unit_price=unit_price,
             total_price=total_price,
-            # current_inventory=new_inventory_quantity
         )
 
         InventoryTransactions.objects.create(
@@ -140,10 +136,11 @@ class AddSaleView(LoginRequiredMixin, View):
             current_inventory=new_inventory_quantity
         )
 
-
-
-        messages.success(request, "Sales saved successfully!")
-        return redirect('sales:sales')
+        if request.POST['save'] == 'Save':
+            messages.success(request, "Sales saved successfully!")
+            return redirect('sales:sales')
+        else:
+            return redirect('sales:add_sales')
 
 class CsvImportForm(forms.Form):
     file = forms.FileField()

@@ -219,16 +219,16 @@ class AddInventoryView(LoginRequiredMixin, View):
                 product_unit=product_unit,
                 current_inventory=current_inventory_quantity
             )
-        if inv_type.name == "Raw Material":
-            print(inv_type.name)
 
-
-        if inv_type == 'Raw Material':
-            messages.success(request, "Raw Material saved successfully!")
-            return redirect('inventory:raw_materials')
+        if request.POST['save'] == 'Save':
+            if inv_type == 'Raw Materials':
+                messages.success(request, "Raw Material saved successfully!")
+                return redirect('inventory:raw_materials')
+            else:
+                messages.success(request, "Finished Good saved successfully!")
+                return redirect('inventory:finished_goods')
         else:
-            messages.success(request, "Finished Good saved successfully!")
-            return redirect('inventory:finished_goods')
+            return redirect('inventory:add_inventory')
         
 
 class InventoryHistoryView(LoginRequiredMixin, View):
