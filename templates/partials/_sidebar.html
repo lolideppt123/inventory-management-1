@@ -56,7 +56,7 @@
                         <div class="accordion-body">
                             <a class="nav-link" href="{% url 'inventory:inventory' %}">Inventory Dashboard</a>
                             <a class="nav-link" href="{% url 'inventory:finished_goods' %}">Finished Goods</a>
-                            <a class="nav-link" href="{% url 'inventory:raw_materials' %}">Raw Materials</a>
+                            {% comment %} <a class="nav-link" href="{% url 'inventory:raw_materials' %}">Raw Materials</a> {% endcomment %}
                             <a class="nav-link" href="{% url 'inventory:inventory_history' %}">Inventory History</a>
                         </div>
                     </div>

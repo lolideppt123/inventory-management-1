@@ -156,7 +156,6 @@ def customeruploadcsv(request):
         csv_file = request.FILES["file"]
         file_data = csv_file.read().decode("utf-8")
         csv_data = file_data.split("\n")
-        # datas = csv_data.split("\r")
 
         # # for Customers
         # for x in csv_data:
@@ -164,11 +163,11 @@ def customeruploadcsv(request):
         #     create = Customer.objects.update_or_create(name=customer_list)
         #     print(customer_list)
 
-        # # for Products
-        # for x in csv_data:
-        #     product_list = x.rstrip("\r")
-        #     create = Products.objects.update_or_create(name=product_list)
-        #     print(product_list)
+        # for Products
+        for x in csv_data:
+            product_list = x.rstrip("\r")
+            create = Products.objects.update_or_create(name=product_list)
+            print(product_list)
             
         # # for Sales
         # for data in csv_data[1:-1]:

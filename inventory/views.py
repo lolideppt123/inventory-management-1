@@ -111,24 +111,21 @@ class FinishedGoodsView(LoginRequiredMixin, View):
 
         return total_quantity
 
-    
-
-
 class RawMaterialsView(LoginRequiredMixin, View):
     login_url = '/authentication/login'
     
     def get(self, request):
-        inventories = models.Inventory.objects.filter(owner=request.user, inv_type=models.InventoryType.objects.get(name="Raw Material"))
-        paginator = Paginator(inventories, 10)
-        page_number = request.GET.get('page')
-        page_obj = paginator.get_page(page_number)
+        # inventories = models.Inventory.objects.filter(owner=request.user, inv_type=models.InventoryType.objects.get(name="Raw Materials"))
+        # paginator = Paginator(inventories, 10)
+        # page_number = request.GET.get('page')
+        # page_obj = paginator.get_page(page_number)
 
-        context = {
-            "inventories": inventories,
-            'page_obj': page_obj,
-        }
+        # context = {
+        #     "inventories": inventories,
+        #     'page_obj': page_obj,
+        # }
 
-        return render(request, 'inventory/raw_materials.html', context)
+        return render(request, 'inventory/raw_materials.html')
 
 
 class AddInventoryView(LoginRequiredMixin, View):
