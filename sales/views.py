@@ -129,6 +129,7 @@ class AddSaleView(LoginRequiredMixin, View):
         InventoryTransactions.objects.create(
             owner=request.user, 
             transaction_type = TransactionType.objects.get(name="Sales"),
+            update_date = today_date,
             date=sales_date,
             customer_supplier=customer,
             product_name=product_name,

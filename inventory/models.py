@@ -49,6 +49,7 @@ class CurrentTotalInventory(models.Model): # Try to get a date for last update_d
 class InventoryTransactions(models.Model):
     owner = models.ForeignKey(to=User, on_delete=models.CASCADE)
     transaction_type = models.ForeignKey('TransactionType', on_delete=models.SET_NULL, null=True)
+    update_date = models.DateField(default=now, null=True)
     date = models.DateField(default=now, null=True)
     customer_supplier = models.CharField(max_length=250, null=False, verbose_name="Customer/Supplier")
     product_name = models.ForeignKey(sales_models.Products, on_delete=models.SET_NULL, null=True)

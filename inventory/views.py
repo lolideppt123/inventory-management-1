@@ -126,7 +126,7 @@ class RawMaterialsView(LoginRequiredMixin, View):
 
 class AddInventoryView(LoginRequiredMixin, View):
     login_url = '/authentication/login'
-    max_date = datetime.datetime.now().strftime ("%Y-%m-%d")
+    max_date = datetime.datetime.now().strftime("%Y-%m-%d")
     products = Products.objects.all()
     product_units = ProductUnit.objects.all()
     inventory_type = models.InventoryType.objects.all()
@@ -209,6 +209,7 @@ class AddInventoryView(LoginRequiredMixin, View):
             models.InventoryTransactions.objects.create(
                 owner=request.user, 
                 transaction_type = models.TransactionType.objects.get(name="Inventory"),
+                update_date = today_date,
                 date=inv_date,
                 customer_supplier=supplier,
                 product_name=product_name,
