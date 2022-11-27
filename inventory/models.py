@@ -41,7 +41,7 @@ class CurrentTotalInventory(models.Model): # Try to get a date for last update_d
 
     class Meta:
         verbose_name_plural = 'Current Total Inventories'
-        ordering = ['-update_date']
+        ordering = ['-date']
 
     def __str__(self):
         return str(self.product_name) or ""
