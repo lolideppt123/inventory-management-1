@@ -30,17 +30,13 @@ class FinishedGoodsView(LoginRequiredMixin, View):
         paginator = Paginator(current_inv, 10)
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
-        inventory_data = {}
 
-        i = 0
-        for inv in current_inv:
-            i+=1
+        for inv in page_obj:
             inv.message = self.get_inventory_message(inv)
-            inventory_data['product_' + str(i)] = [inv.update_date, inv.product_name, inv.current_inventory_quantity, inv.product_unit, inv.inv_type, inv.message]
 
         context = {
             'page_obj': page_obj,
-            'inventory_data': inventory_data,
+            'current_inv': current_inv,
         }
 
         return render(request, 'inventory/finished_goods.html', context)
@@ -146,6 +142,7 @@ class AddInventoryView(LoginRequiredMixin, View):
 
     def post(self, request):
         product_name = Products.objects.get(name=request.POST['product_name'])
+        supplier = request.POST['supplier']
         inv_quantity = request.POST['inv_quantity']
         product_unit = ProductUnit.objects.get(name=request.POST['product_unit'])
         inv_date = request.POST['inv_date']
@@ -198,12 +195,12 @@ class AddInventoryView(LoginRequiredMixin, View):
 
         models.Inventory.objects.create(
             owner = request.user,
+            supplier = supplier,
             product_name = product_name,
             product_unit = product_unit,
             date = inv_date,
             inv_quantity = inv_quantity,
             inv_type = inv_type,
-            # current_inventory = current_inventory_quantity
         )
 
         if inv_type.name == "Finished Goods":
@@ -211,6 +208,7 @@ class AddInventoryView(LoginRequiredMixin, View):
                 owner=request.user, 
                 transaction_type = models.TransactionType.objects.get(name="Inventory"),
                 date=inv_date,
+                customer_supplier=supplier,
                 product_name=product_name,
                 quantity=inv_quantity,
                 product_unit=product_unit,
@@ -240,7 +238,6 @@ class InventoryHistoryView(LoginRequiredMixin, View):
 
     def post(self, request):
         product_picked = json.loads(request.body).get('fieldValue', '')
-        # print(product_picked)
         product_name = Products.objects.get(name=product_picked)
 
         inventory_transaction = models.InventoryTransactions.objects.filter(owner=request.user, product_name=product_name)

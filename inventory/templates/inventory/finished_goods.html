@@ -45,7 +45,7 @@
     </div>
 
     <div class="container">
-        {% if inventory_data %}
+        {% if current_inv.count %}
         
         <div class="app-table">
             <table class="table table-striped table-hover table-sm">
@@ -61,25 +61,25 @@
                 </thead>
                 
                 <tbody>
-                    {% comment %} {% for inv in page_obj %} {% endcomment %}
-                    {% for inv in inventory_data.values %}
+
+                    {% for inv in page_obj %}
                     <tr>
-                        <td>{{inv.0}}</td>
-                        <td>{{inv.1}}</td>
+                        <td>{{inv.update_date}}</td>
+                        <td>{{inv.product_name}}</td>
                         <td>
                             <div class="progress" style="height: 20px;">
-                                <div class="progress-bar bg-{{inv.5}}" role="progressbar" style="width: 50%">
-                                    <span>{{inv.2|intcomma}}</span>
+                                <div class="progress-bar bg-{{inv.message}}" role="progressbar" style="width: 50%">
+                                    <span>{{inv.current_inventory_quantity|intcomma}}</span>
                                 </div>
                             </div>
                         </td>
                         <td></td>
-                        <td>{{inv.3|intcomma}}</td>
-                        <td>{{inv.4}}</td>
+                        <td>{{inv.product_unit}}</td>
+                        <td>{{inv.inv_type}}</td>
                         {% comment %} <td><a href={% url 'expenses:edit_expense' expense.id %} class="btn btn-secondary btn-sm">Edit</a></td> {% endcomment %}
                     </tr>
                     {% endfor %}
-                    {% comment %} {% endfor %} {% endcomment %}
+
                 </tbody>
                 
             </table>

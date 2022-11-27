@@ -21,6 +21,11 @@
                     </div>
 
                     <div class="form-group mb-2">
+                        <label for="">Supplier</label>
+                        <input type="text" class="form-control form-control-sm" id="supplier" name="supplier" max="{{max_date}}" value="{{values.inv_date}}" />
+                    </div>
+
+                    <div class="form-group mb-2">
                         <label for="">Product Name</label>
                         <select class="form-select" name="product_name" id="product_name" >
                             {% if values.product_name %}
