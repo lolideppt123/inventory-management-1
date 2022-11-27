@@ -218,6 +218,22 @@ class AddInventoryView(LoginRequiredMixin, View):
                 current_inventory=current_inventory_quantity
             )
 
+            # Code for forgot to entry on previous days.
+            inv_trans = models.InventoryTransactions.objects.filter(
+                owner=request.user,
+                product_name=product_name,
+            )
+            curr_inventory = 0
+            for inv in inv_trans:
+                obj = models.InventoryTransactions.objects.get(pk=inv.pk)
+                if obj.transaction_type == models.TransactionType.objects.get(name="Inventory"):
+                    curr_inventory += inv.quantity
+                    obj.current_inventory = curr_inventory
+                else:
+                    curr_inventory -= inv.quantity
+                    obj.current_inventory = curr_inventory
+                obj.save()
+
         if request.POST['save'] == 'Save':
             if inv_type == 'Raw Materials':
                 messages.success(request, "Raw Material saved successfully!")

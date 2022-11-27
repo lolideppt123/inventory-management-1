@@ -137,6 +137,21 @@ class AddSaleView(LoginRequiredMixin, View):
             product_unit=product_unit,
             current_inventory=new_inventory_quantity
         )
+        # Code for forgot to entry on previous days.
+        inv_trans = InventoryTransactions.objects.filter(
+            owner=request.user,
+            product_name=product_name,
+        )
+        curr_inventory = 0
+        for inv in inv_trans:
+            obj = InventoryTransactions.objects.get(pk=inv.pk)
+            if obj.transaction_type == TransactionType.objects.get(name="Inventory"):
+                curr_inventory += inv.quantity
+                obj.current_inventory = curr_inventory
+            else:
+                curr_inventory -= inv.quantity
+                obj.current_inventory = curr_inventory
+            obj.save()
 
         if request.POST['save'] == 'Save':
             messages.success(request, "Sales saved successfully!")
