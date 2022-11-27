@@ -32,6 +32,7 @@ class InventoryTransactionsSerializer(serializers.ModelSerializer):
     class Meta:
         model = InventoryTransactions
         fields = (
+            'update_date',
             'date',
             'transaction_type',
             'customer_supplier',
