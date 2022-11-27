@@ -185,8 +185,6 @@ STATICFILES_STORAGE = 'storages.backends.s3boto3.S3StaticStorage'
 
 
 CSRF_TRUSTED_ORIGINS = ['https://metserv-inventory-management.up.railway.app/*']
-
-CSRF_TRUSTED_ORIGINS = ['metserv-inventory-management.up.railway.app']
 CSRF_COOKIE_DOMAIN = 'metserv-inventory-management.up.railway.app'
 
 CORS_ORIGIN_WHITELIST = (
