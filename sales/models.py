@@ -15,6 +15,10 @@ class Sales(models.Model):
     product_unit = models.ForeignKey('ProductUnit', on_delete=models.SET_NULL, null=True)
     unit_price = models.DecimalField(decimal_places=2, max_digits=15)
     total_price = models.DecimalField(decimal_places=2, max_digits=15)
+    unit_cost = models.DecimalField(decimal_places=2, max_digits=15)
+    total_cost = models.DecimalField(decimal_places=2, max_digits=15)
+    margin = models.DecimalField(decimal_places=2, max_digits=15)
+    margin_percent = models.DecimalField(decimal_places=4, max_digits=15)
     sold_type = models.ForeignKey('SoldType', on_delete=models.SET_NULL, null=True)
 
     owner = models.ForeignKey(to=User, on_delete=models.CASCADE)
