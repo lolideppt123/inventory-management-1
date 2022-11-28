@@ -6,8 +6,8 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 
 # Create your models here.
 class Sales(models.Model):
-    delivery_receipt = models.IntegerField(validators=[ MinValueValidator(0), MaxValueValidator(9999) ], null=True, blank=True, default=0000)
-    invoice = models.IntegerField(validators=[ MinValueValidator(0), MaxValueValidator(9999) ], null=True, blank=True, default=0000)
+    delivery_receipt = models.CharField(max_length=250, default="0000", null=True, blank=True)
+    invoice = models.CharField(max_length=250, default="0000", null=True, blank=True)
     date = models.DateField(default=now, null=True, blank=True)
     customer = models.ForeignKey('Customer', on_delete=models.SET_NULL, null=True)
     product_name = models.ForeignKey('Products', on_delete=models.SET_NULL, null=True)
