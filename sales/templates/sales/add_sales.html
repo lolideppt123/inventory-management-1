@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
+{% load static %}
 
 {% comment %} <h1>Add Expense</h1> {% endcomment %}
 <div class="container mt-3">
@@ -84,8 +85,8 @@
                     </div>
 
                     <div class="form-group mb-2">
-                        <label for="">Total Cost</label>
-                        <input type="number" class="form-control form-control-sm" id="total_price" name="total_price" value="{{values.total_price}}" step="0.01" required/>
+                        <label for="">Sales</label>
+                        <input type="number" class="form-control form-control-sm" id="total_price" name="total_price" value="{{values.total_price}}" step="0.01" disabled/>
                     </div>
 
                     <div class="form-group mb-2">
@@ -95,7 +96,7 @@
 
                     <div class="form-group mb-2">
                         <label for="">Total Cost</label>
-                        <input type="number" class="form-control form-control-sm" id="total_cost" name="total_cost" value="{{values.total_cost}}" step="0.01" required/>
+                        <input type="number" class="form-control form-control-sm" id="total_cost" name="total_cost" value="{{values.total_cost}}" step="0.01" disabled/>
                     </div>
                     
                     <input type="submit" value="Save" class="btn btn-primary btn-primary-sm" name="save" />
@@ -107,4 +108,5 @@
     
 </div>
 
+<script src="{% static 'js/add_sales.js' %}"></script>
 {% endblock content %}
