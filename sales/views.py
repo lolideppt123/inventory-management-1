@@ -52,6 +52,10 @@ class AddSaleView(LoginRequiredMixin, View):
         product_unit = ProductUnit.objects.get(name=request.POST['product_unit'])
         unit_price = request.POST['unit_price']
         total_price = request.POST['total_price']
+        unit_cost = request.POST['unit_cost']
+        total_cost = request.POST['total_cost']
+        margin = Decimal(total_price) - Decimal(total_cost)
+        margin_percent = margin / Decimal(total_cost)
 
         context = {
             'values': request.POST,
@@ -124,6 +128,10 @@ class AddSaleView(LoginRequiredMixin, View):
             product_unit=product_unit,
             unit_price=unit_price,
             total_price=total_price,
+            unit_cost=unit_cost,
+            total_cost=total_cost,
+            margin=margin,
+            margin_percent=margin_percent,
         )
 
         InventoryTransactions.objects.create(
