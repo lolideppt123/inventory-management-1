@@ -157,7 +157,7 @@ class AddInventoryView(LoginRequiredMixin, View):
             'product_units': self.product_units,
         }
 
-        if inv_type.name == "Raw Material":
+        if inv_type.name == "Raw Materials":
             messages.error(request, 'Cannot add Raw Materials for now. Please try again later.')
             return render(request, 'inventory/add_inventory.html', context) 
 

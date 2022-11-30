@@ -2,11 +2,14 @@
 
 {% if messages %}
 <link href="{% static 'css/_messages.css' %}" rel="stylesheet">
-<script src="{% static 'js/_messages.js' %}"></script>
-<div class="messages" id="myAlert">
+<div class="messages d-md-flex flex-column" id="myAlert">
     {% for message in messages %}
-    <div{% if message.tags %} class="alert alert-{{ message.tags }} "{% endif %}>{{ message }}</div>
+    <div{% if message.tags %} class="alert alert-{{ message.tags }} "{% endif %}>
+        <span>{{ message }}</span>
+        <div id="msg_btn" class="btn btn-outline-dark float-end"><span data-feather="x" class="align-text-end"></span></div>
+    </div>
     {% endfor %}
 </div>
+<script src="{% static 'js/_messages.js' %}"></script>
 {% endif %}
 
