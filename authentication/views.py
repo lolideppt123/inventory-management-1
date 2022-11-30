@@ -143,7 +143,7 @@ class LoginView(View):
             if user is not None:
                 if user.is_active:
                     auth.login(request, user)
-                    messages.success(request, "Welcome, " + user.username + " you are now logged in")
+                    messages.success(request, "Welcome, " + user.username + " you are now logged in ")
                     return redirect('dashboard:home')
                 
                 messages.error(request, "Account is not activated. Please check your email for the activation link.")
