@@ -56,7 +56,7 @@
                                 <option name="product_name" value="" selected>Choose...</option>
                             {% endif %}
                             {% for product in products %}
-                                <option name="product_name" value="{{product}}">{{product}}</option>
+                                <option name="product_name" value="{{product}}">{{product.name}}</option>
                             {% endfor %} 
                         </select>
                     </div>
