@@ -8,4 +8,6 @@ urlpatterns = [
     path('', views.IndexPageView.as_view(), name='sales'),
     path('add-sale', csrf_exempt(views.AddSaleView.as_view()), name='add_sales'),
     path('customer-upload', views.customeruploadcsv, name='customer_upload'),
+    path('product-upload', views.productuploadcsv, name='product_upload'),
+    path('sales-upload', views.salesuploadcsv, name='sales_upload'),
 ]

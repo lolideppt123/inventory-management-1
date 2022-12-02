@@ -24,16 +24,24 @@
 
             <div class="btn-toolbar mb-2 mb-md-0">
 				<div class="btn-group me-2">
-                    <div class="btn-group">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="defaultDropdown1" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
+                        Import
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="defaultDropdown1">
+                        <li><a href="{% url 'sales:customer_upload' %}" class="dropdown-item">Customer</a></li>
+                        <li><a href="{% url 'sales:product_upload' %}" class="dropdown-item">Products</a></li>
+                        <li><a href="{% url 'sales:sales_upload' %}" class="dropdown-item">Sales</a></li>
+                    </ul>
+                    {% comment %} <div class="btn-group">
 						<a href="{% url 'sales:customer_upload' %}" class="btn-secondary" id="">
 							Import
                         </a>
-                    </div>
+                    </div> {% endcomment %}
 					<div class="btn-group me-2">
-						<button class="btn btn-secondary dropdown-toggle" type="button" id="defaultDropdown" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
+						<button class="btn btn-secondary dropdown-toggle" type="button" id="defaultDropdown2" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
 							Export
 						</button>
-						<ul class="dropdown-menu" aria-labelledby="defaultDropdown">
+						<ul class="dropdown-menu" aria-labelledby="defaultDropdown2">
 						  <li><a href="#" class="dropdown-item">CSV</a></li>
 						  <li><a href="#" class="dropdown-item">Excel</a></li>
 						  {% comment %} <li><a href="{% url 'expenses:export_pdf' %}" class="dropdown-item">PDF</a></li> {% endcomment %}

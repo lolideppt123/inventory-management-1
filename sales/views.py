@@ -170,24 +170,12 @@ class AddSaleView(LoginRequiredMixin, View):
 class CsvImportForm(forms.Form):
     file = forms.FileField()
 
-def customeruploadcsv(request):
-    
+def productuploadcsv(request):
     if request.method == "POST":
-
-        # import pdb
-        # pdb.set_trace()
-        
 
         csv_file = request.FILES["file"]
         file_data = csv_file.read().decode("utf-8")
         csv_data = file_data.split("\n")
-
-        # # for Customers
-        # for x in csv_data[1:-1]:
-        #     customer_list = x.rstrip("\r")
-        #     create = Customer.objects.update_or_create(name=customer_list)
-        #     print(customer_list)
-        ###############################
 
         # for Products
         for x in csv_data[1:-1]:
@@ -202,28 +190,58 @@ def customeruploadcsv(request):
             product_list = Products.objects.all()
             print(product_list)
         ############################################
-            
-        # # for Sales
-        # for data in csv_data[1:-1]:
-        #     new_data = data.split(",")
-        #     print(new_data)
-        #     new_data[8] = new_data[8].rstrip("\r")
 
-        #     print(new_data)
+    form = CsvImportForm()
+    context = {"form": form}
+    return render(request, 'sales/product_upload.html', context)
 
-        #     create = Sales.objects.create(
-        #         owner=request.user,
-        #         delivery_receipt=new_data[0],
-        #         invoice=new_data[1],
-        #         sales_date=new_data[2],
-        #         customer=Customer.objects.get(name=new_data[3]),
-        #         product_name=Products.objects.get(name=new_data[4]),
-        #         sold_quantity=new_data[5],
-        #         product_unit=ProductUnit.objects.get(name=new_data[6]),
-        #         unit_price=new_data[7],
-        #         total_price=new_data[8]
-        #     )
+def salesuploadcsv(request):
+    if request.method == "POST":
+
+        csv_file = request.FILES["file"]
+        file_data = csv_file.read().decode("utf-8")
+        csv_data = file_data.split("\n")
+
+        # for Sales
+        for data in csv_data[1:-1]:
+            new_data = data.split(",")
+            print(new_data)
+            new_data[8] = new_data[8].rstrip("\r")
+
+            print(new_data)
+
+            create = Sales.objects.create(
+                owner=request.user,
+                delivery_receipt=new_data[0],
+                invoice=new_data[1],
+                sales_date=new_data[2],
+                customer=Customer.objects.get(name=new_data[3]),
+                product_name=Products.objects.get(name=new_data[4]),
+                sold_quantity=new_data[5],
+                product_unit=ProductUnit.objects.get(name=new_data[6]),
+                unit_price=new_data[7],
+                total_price=new_data[8]
+            )
         ###############################################
+
+    form = CsvImportForm()
+    context = {"form": form}
+    return render(request, 'sales/sales_upload.html', context)
+
+def customeruploadcsv(request):
+    
+    if request.method == "POST":
+
+        csv_file = request.FILES["file"]
+        file_data = csv_file.read().decode("utf-8")
+        csv_data = file_data.split("\n")
+
+        # for Customers
+        for x in csv_data[1:-1]:
+            customer_list = x.rstrip("\r")
+            create = Customer.objects.update_or_create(name=customer_list)
+            print(customer_list)
+        ###############################
 
         # # For Add Inventory
         # from inventory import models
@@ -249,11 +267,6 @@ def customeruploadcsv(request):
         #     )
         ###########################################
 
-
-
-        
-        # import pdb
-        # pdb.set_trace()
 
 
     form = CsvImportForm()
