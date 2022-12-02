@@ -20,7 +20,7 @@
                 <div class="form-group">
                     {% if product_list.count %}
                     <select class="form-select" name="product_name" id="product_name">
-                        {% for product in product_list.name %}
+                        {% for product in product_list %}
                         <option value="{{product}}" name="product_name" id="product_name">{{product}}</option>
                         {% endfor %}
                     </select>
