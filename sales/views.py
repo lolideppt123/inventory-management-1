@@ -183,16 +183,25 @@ def customeruploadcsv(request):
         csv_data = file_data.split("\n")
 
         # # for Customers
-        # for x in csv_data:
+        # for x in csv_data[1:-1]:
         #     customer_list = x.rstrip("\r")
         #     create = Customer.objects.update_or_create(name=customer_list)
         #     print(customer_list)
+        ###############################
 
         # for Products
-        for x in csv_data:
-            product_list = x.rstrip("\r")
-            create = Products.objects.update_or_create(name=product_list)
+        for x in csv_data[1:-1]:
+            data = x.split(",")
+            data[1] = data[1].rstrip("\r")
+            print(data)
+
+            create = Products.objects.update_or_create(
+                name=data[0],
+                product_unit = ProductUnit.objects.get(name=data[1]),
+            )
+            product_list = Products.objects.all()
             print(product_list)
+        ############################################
             
         # # for Sales
         # for data in csv_data[1:-1]:
@@ -214,6 +223,7 @@ def customeruploadcsv(request):
         #         unit_price=new_data[7],
         #         total_price=new_data[8]
         #     )
+        ###############################################
 
         # # For Add Inventory
         # from inventory import models
@@ -237,6 +247,7 @@ def customeruploadcsv(request):
         #         inv_quantity=new_data[2],
         #         inv_type=models.InventoryType.objects.get(name=new_data[4]),
         #     )
+        ###########################################
 
 
 
