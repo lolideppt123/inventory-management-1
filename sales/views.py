@@ -46,8 +46,8 @@ class AddSaleView(LoginRequiredMixin, View):
         delivery_receipt = request.POST['delivery_receipt']
         invoice = request.POST['invoice']
         sales_date = request.POST['sales_date']
-        customer = Customer.objects.get(name=request.POST['customer'].rstrip("\n\r"))
-        product_name = Products.objects.get(name=request.POST['product_name'].rstrip("\n\r"))
+        customer = Customer.objects.get(name=request.POST['customer'])
+        product_name = Products.objects.get(name=request.POST['product_name'])
         sold_quantity = request.POST['sold_quantity']
         product_unit = ProductUnit.objects.get(name=request.POST['product_unit'])
         unit_price = request.POST['unit_price']

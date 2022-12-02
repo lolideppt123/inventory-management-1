@@ -15,8 +15,10 @@ class SalesAdmin(admin.ModelAdmin):
         "total_price"
     ]
 
+class ProductsAdmin(admin.ModelAdmin):
+    list_display = ["name", "product_unit"]
 
 admin.site.register(Sales, SalesAdmin)
 admin.site.register(Customer)
-admin.site.register(Products)
+admin.site.register(Products, ProductsAdmin)
 admin.site.register(ProductUnit)

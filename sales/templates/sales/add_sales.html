@@ -49,7 +49,7 @@
 
                     <div class="form-group mb-2">
                         <label for="">Product Name</label>
-                        <select class="form-select" name="product_name" id="product_name" >
+                        <select class="form-select" name="product_name" id="product_name" required>
                             {% if values.product_name %}
                                 <option name="product_name" value="{{values.product_name}}" selected>{{values.product_name}}</option>
                             {% else %}

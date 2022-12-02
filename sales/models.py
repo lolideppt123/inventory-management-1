@@ -40,6 +40,7 @@ class Customer(models.Model):
 
 class Products(models.Model):
     name = models.CharField(max_length=250)
+    product_unit = models.ForeignKey('ProductUnit', on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         return str(self.name) or ""
