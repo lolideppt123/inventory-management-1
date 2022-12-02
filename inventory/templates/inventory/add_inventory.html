@@ -33,7 +33,7 @@
                             {% else %}
                                 <option name="product_name" value="" selected>Choose...</option>
                             {% endif %}
-                            {% for product in products %}
+                            {% for product in products.name %}
                                 <option name="product_name" value="{{product}}">{{product}}</option>
                             {% endfor %} 
                         </select>
