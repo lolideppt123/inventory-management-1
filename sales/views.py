@@ -87,6 +87,11 @@ class AddSaleView(LoginRequiredMixin, View):
             messages.error(request, 'Total price is required')
             return render(request, 'sales/add_sales.html', context)
 
+        #Check if the user picked the right product unit
+        if product_name.product_unit != product_unit:
+            product_unit = ProductUnit.objects.get(name=product_name.product_unit)
+            messages.info(request, f"We have changed {product_name} unit to its appropriate unit: \"{product_unit}\"")
+            print(product_unit)
 
         try:
             # Change this to add inventory type
@@ -162,9 +167,10 @@ class AddSaleView(LoginRequiredMixin, View):
             obj.save()
 
         if request.POST['save'] == 'Save':
-            messages.success(request, "Sales saved successfully!")
+            messages.success(request, f"Sales of {product_name}, {sold_quantity}{product_unit} to {customer} has been saved successfully!")
             return redirect('sales:sales')
         else:
+            messages.success(request, f"Sales of {product_name}, {sold_quantity}{product_unit} to {customer} has been saved successfully!")
             return redirect('sales:add_sales')
 
 class CsvImportForm(forms.Form):
