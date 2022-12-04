@@ -180,6 +180,11 @@ class AddInventoryView(LoginRequiredMixin, View):
         if not inv_type:
             messages.error(request, 'Product Unit is required')
             return render(request, 'inventory/add_inventory.html', context)
+        #Check if the user picked the right product unit
+        if product_name.product_unit != product_unit:
+            product_unit = ProductUnit.objects.get(name=product_name.product_unit)
+            messages.info(request, f"We have changed {product_name} unit to its appropriate unit: \"{product_unit}\"")
+            print(product_unit)
 
         # Updates model
         try:
@@ -243,9 +248,10 @@ class AddInventoryView(LoginRequiredMixin, View):
                 messages.success(request, "Raw Material saved successfully!")
                 return redirect('inventory:raw_materials')
             else:
-                messages.success(request, "Finished Good saved successfully!")
+                messages.success(request, f"Successfully added {product_name} to inventory!")
                 return redirect('inventory:finished_goods')
         else:
+            messages.success(request, f"Successfully added {product_name} to inventory!")
             return redirect('inventory:add_inventory')
         
 

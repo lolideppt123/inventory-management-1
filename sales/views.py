@@ -63,6 +63,7 @@ class AddSaleView(LoginRequiredMixin, View):
             'products': self.products,
             'customers': self.customers,
             'product_units': self.product_units,
+            'item_unit': ProductUnit.objects.get(name=product_name.product_unit),
         }
 
         if not sales_date:

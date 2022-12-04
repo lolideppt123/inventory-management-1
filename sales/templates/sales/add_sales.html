@@ -70,12 +70,12 @@
                         <label for="">Unit</label>
                         <select class="form-select" name="product_unit" id="product_unit" >
                             {% for product_unit in product_units %}
-                                {% if category.name == 'Choose...' %}
-                                    <option name="product_unit" value="{{product_unit}}" selected>{{product_unit}}</option>
+                                {% if product_unit == item_unit %}
+                                <option name="product_unit" value="{{product_unit}}" selected>{{product_unit}}</option>
                                 {% else %}
-                                    <option name="product_unit" value="{{product_unit}}">{{product_unit}}</option>
+                                <option name="product_unit" value="{{product_unit}}">{{product_unit}}</option>
                                 {% endif %}
-                            {% endfor %} 
+                            {% endfor %}
                         </select>
                     </div>
 
