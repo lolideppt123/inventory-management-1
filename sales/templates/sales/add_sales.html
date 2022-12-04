@@ -11,10 +11,10 @@
             <li class="breadcrumb-item active" aria-current="page">Add Sales</li>
         </ol>
     </nav>
-    
+    {% include 'partials/_messages.html' %}
     <div class="row">
         <div class="col-lg-8 mx-auto">
-            <div class="rounded shadow p-5">{% include 'partials/_messages.html' %}
+            <div class="rounded shadow p-5">
                 <form action="{% url 'sales:add_sales' %}" method="POST">
                     {% csrf_token %}
                     <div class="form-group mb-2">
