@@ -56,6 +56,8 @@ class InventoryTransactions(models.Model):
     quantity = models.DecimalField(decimal_places=2, max_digits=8)
     product_unit = models.ForeignKey(sales_models.ProductUnit, on_delete=models.SET_NULL, null=True)
     current_inventory = models.DecimalField(decimal_places=2, max_digits=10, null=True)
+    sales_pk = models.ForeignKey(sales_models.Sales, on_delete=models.SET_NULL, null=True)
+    inventory_pk = models.ForeignKey("Inventory", on_delete=models.SET_NULL, null=True)
 
     class Meta:
         verbose_name_plural = 'Inventory Transactions'
