@@ -94,7 +94,7 @@
                             <td>{{sale.total_cost|intcomma}}</td>
                             <td>{{sale.margin|intcomma}}</td>
                             <td>{{sale.margin_percent|intcomma}}</td>
-                            <td><a href={% url 'sales:edit_sales' sale.id %} class="btn btn-secondary btn-sm">Edit</a></td>
+                            <td><a href={% url 'sales:edit_sales' sales.id %} class="btn btn-secondary btn-sm">Edit</a></td>
                         </tr>
                         {% endfor %}
                     </tbody>

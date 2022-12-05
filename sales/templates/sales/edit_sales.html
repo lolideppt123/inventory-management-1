@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+
+{% comment %} <h1>Add Expense</h1> {% endcomment %}
+<div class="container mt-3">
+    
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'sales:sales' %}">Sales</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Add Sales</li>
+        </ol>
+    </nav>
+    {% include 'partials/_messages.html' %}
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="rounded shadow p-5">
+                <form action="{% url 'sales:edit_sales' sales.id %}" method="POST">
+                    {% csrf_token %}
+                    <div class="form-group mb-2">
+                        <label for="">Delivery Receipt</label>
+                        <input type="text" class="form-control form-control-sm" id="delivery_receipt" name="delivery_receipt" value="{{sales.delivery_receipt}}" placeholder="0000" autofocus/>
+                    </div>
+
+                    <div class="form-group mb-2">
+                        <label for="">Invoice Number</label>
+                        <input type="text" class="form-control form-control-sm" id="invoice" name="invoice" value="{{sales.invoice}}" placeholder="0000" />
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="">Date</label>
+                        <input type="date" class="form-control form-control-sm" id="sales_date" name="sales_date" max="{{max_date}}" value="{{sales_date}}" required/>
+                    </div>
+
+
+                    <div class="form-group mb-2">
+                        <label for="">Customer</label>
+                        <select class="form-select" name="customer" id="customer" >
+                            {% for customer in customers %}
+                                {% if sales.customer == customer %}
+                                    <option name="customer" value="{{customer}}" selected>{{customer}}</option>
+                                {% else %}
+                                    <option name="customer" value="{{customer}}">{{customer}}</option>
+                                {% endif %}
+                            {% endfor %} 
+                        </select>
+                    </div>
+
+                    <div class="form-group mb-2">
+                        <label for="">Product Name</label>
+                        <select class="form-select" name="product_name" id="product_name" required>
+                            {% for product in products %}
+                                {% if sales.product_name == product %}
+                                    <option name="product_name" value="{{product}}" selected>{{product}}</option>
+                                {% else %}
+                                    <option name="product_name" value="{{product}}">{{product}}</option>
+                                {% endif %}
+                            {% endfor %} 
+                        </select>
+                    </div>
+
+                    <div class="form-group mb-2">
+                        <label for="">Quantity</label>
+                        <input type="number" class="form-control form-control-sm" id="sold_quantity" name="sold_quantity" value="{{sales.sold_quantity}}" step="0.01" required/>
+                    </div>
+
+                    <div class="form-group mb-2">
+                        <label for="">Unit</label>
+                        <select class="form-select" name="product_unit" id="product_unit" required>
+                            {% for product_unit in product_units %}
+                                {% if sales.product_unit == product_unit %}
+                                    <option name="product_unit" value="{{product_unit}}" selected>{{product_unit}}</option>
+                                {% else %}
+                                    <option name="product_unit" value="{{product_unit}}">{{product_unit}}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group mb-2">
+                        <label for="">Unit Price</label>
+                        <input type="number" class="form-control form-control-sm" id="unit_price" name="unit_price" value="{{sales.unit_price}}" step="0.01" required/>
+                    </div>
+
+                    <div class="form-group mb-2">
+                        <label for="">Sales</label>
+                        <input type="number" class="form-control form-control-sm" id="total_price" name="total_price" value="{{sales.total_price}}" step="0.01" readonly required/>
+                    </div>
+
+                    <div class="form-group mb-2">
+                        <label for="">Unit Cost</label>
+                        <input type="number" class="form-control form-control-sm" id="unit_cost" name="unit_cost" value="{{sales.unit_cost}}" step="0.01" required/>
+                    </div>
+
+                    <div class="form-group mb-2">
+                        <label for="">Total Cost</label>
+                        <input type="number" class="form-control form-control-sm" id="total_cost" name="total_cost" value="{{sales.total_cost}}" step="0.01" readonly required/>
+                    </div>
+                    
+                    <input type="submit" value="Save" class="btn btn-primary btn-primary-sm" name="save" />
+                </form>
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+<script src="{% static 'js/add_sales.js' %}"></script>
+{% endblock content %}
