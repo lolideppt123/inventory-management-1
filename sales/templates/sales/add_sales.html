@@ -35,7 +35,7 @@
 
                     <div class="form-group mb-2">
                         <label for="">Customer</label>
-                        <select class="form-select" name="customer" id="customer" >
+                        <select class="form-select" name="customer" id="customer" required>
                             {% if values.customer %}
                                 <option name="customer" value="{{values.customer}}" selected>{{values.customer}}</option>
                             {% else %}

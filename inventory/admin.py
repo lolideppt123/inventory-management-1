@@ -9,7 +9,7 @@ class InventoryAdmin(admin.ModelAdmin):
     list_display = ['date', 'product_name', 'inv_quantity', 'product_unit', 'inv_type', 'owner']
 
 class InventoryTransactionAdmin(admin.ModelAdmin):
-    list_display = ['date', 'customer_supplier', 'product_name', 'quantity', 'product_unit', 'current_inventory', 'owner']
+    list_display = ['date', 'customer_supplier', 'product_name', 'quantity', 'product_unit', 'current_inventory', 'owner', 'sales_pk', 'inventory_pk']
 
 
 admin.site.register(Inventory, InventoryAdmin)

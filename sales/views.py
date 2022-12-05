@@ -122,8 +122,8 @@ class AddSaleView(LoginRequiredMixin, View):
         obj.date = sales_date
         obj.current_inventory_quantity = new_inventory_quantity
         obj.save()
-
-        Sales.objects.create(
+        # Create Sales
+        new_sales = Sales.objects.create(
             owner=request.user, 
             delivery_receipt=delivery_receipt, 
             invoice=invoice,
@@ -139,7 +139,7 @@ class AddSaleView(LoginRequiredMixin, View):
             margin=margin,
             margin_percent=margin_percent,
         )
-
+        # Create InventoryTransaction
         InventoryTransactions.objects.create(
             owner=request.user, 
             transaction_type = TransactionType.objects.get(name="Sales"),
@@ -149,7 +149,8 @@ class AddSaleView(LoginRequiredMixin, View):
             product_name=product_name,
             quantity=sold_quantity,
             product_unit=product_unit,
-            current_inventory=new_inventory_quantity
+            current_inventory=new_inventory_quantity,
+            sales_pk = Sales.objects.get(pk=new_sales.pk)
         )
         # Code for forgot to entry on previous days.
         inv_trans = InventoryTransactions.objects.filter(
@@ -173,6 +174,123 @@ class AddSaleView(LoginRequiredMixin, View):
         else:
             messages.success(request, f"Sales of {product_name}, {sold_quantity}{product_unit} to {customer} has been saved successfully!")
             return redirect('sales:add_sales')
+
+class EditSaleView(LoginRequiredMixin, View):
+    login_url = '/authentication/login'
+    products = Products.objects.all()
+    customers = Customer.objects.all()
+    product_units = ProductUnit.objects.all()
+
+    max_date = datetime.datetime.now().strftime ("%Y-%m-%d")
+    def get(self, request, id):
+        sales = Sales.objects.get(pk=id)
+        sales_date = sales.date.strftime("%Y-%m-%d")
+
+        context = {
+            'sales': sales,
+            'products': self.products,
+            'customers': self.customers,
+            'product_units': self.product_units,
+            'sales_date': sales_date,
+            'max_date': self.max_date,
+        }
+
+        return render(request, 'sales/edit_sales.html', context)
+
+    def post(self, request, id):
+        sales = Sales.objects.get(pk=id)
+        inv_trans = InventoryTransactions.objects.get(sales_pk=sales)
+        today_date = datetime.date.today()
+        
+        delivery_receipt = request.POST['delivery_receipt']
+        invoice = request.POST['invoice']
+        sales_date = request.POST['sales_date']
+        customer = Customer.objects.get(name=request.POST['customer'])
+        product_name = Products.objects.get(name=request.POST['product_name'])
+        sold_quantity = request.POST['sold_quantity']
+        product_unit = ProductUnit.objects.get(name=request.POST['product_unit'])
+        unit_price = request.POST['unit_price']
+        total_price = request.POST['total_price']
+        unit_cost = request.POST['unit_cost']
+        total_cost = request.POST['total_cost']
+        margin = Decimal(total_price) - Decimal(total_cost)
+        margin_percent = margin / Decimal(total_cost)
+
+        context = {
+            'values': request.POST,
+            'max_date': self.max_date,
+            'products': self.products,
+            'customers': self.customers,
+            'product_units': self.product_units,
+            'item_unit': ProductUnit.objects.get(name=product_name.product_unit),
+        }
+
+        if not customer or customer == "Choose..." or customer == "Choose":
+            messages.error(request, 'Please choose a Customer')
+
+        #Check if the user picked the right product unit
+        if product_name.product_unit != product_unit:
+            product_unit = ProductUnit.objects.get(name=product_name.product_unit)
+            messages.info(request, f"We have changed {product_name} unit to its appropriate unit: \"{product_unit}\"")
+            print(product_unit)
+
+        # updates sales
+        sales.owner=request.user
+        sales.delivery_receipt=delivery_receipt
+        sales.invoice=invoice
+        sales.date=sales_date
+        sales.customer=customer
+        sales.product_name=product_name
+        sales.sold_quantity=sold_quantity
+        sales.product_unit=product_unit
+        sales.unit_price=unit_price
+        sales.total_price=total_price
+        sales.unit_cost=unit_cost
+        sales.total_cost=total_cost
+        sales.margin=margin
+        sales.margin_percent=margin_percent
+        sales.save()
+
+        # Updates InventoryTransaction
+        inv_trans.owner=request.user
+        inv_trans.update_date=today_date
+        inv_trans.date=sales_date
+        inv_trans.customer_supplier=customer.name
+        inv_trans.product_name=product_name
+        inv_trans.quantity=sold_quantity
+        inv_trans.product_unit=product_unit
+        inv_trans.save()
+
+        # Updates inventorytransaction current_inventory & set new_inventory_quantity value
+        inv_trans = InventoryTransactions.objects.filter(
+            owner=request.user,
+            product_name=product_name,
+        )
+        curr_inventory = 0
+        new_inventory_quantity = 0
+        for inv in inv_trans:
+            obj = InventoryTransactions.objects.get(pk=inv.pk)
+            if obj.transaction_type == TransactionType.objects.get(name="Inventory"):
+                curr_inventory += inv.quantity
+                obj.current_inventory = curr_inventory
+                new_inventory_quantity = obj.current_inventory
+            else:
+                curr_inventory -= inv.quantity
+                obj.current_inventory = curr_inventory
+                new_inventory_quantity = obj.current_inventory
+            obj.save()
+        
+        # Updates CurrentTotalInventory Quantity
+        obj, created = CurrentTotalInventory.objects.get_or_create(owner=request.user, product_name=product_name, inv_type=InventoryType.objects.get(name="Finished Goods"))
+        obj.owner = request.user
+        obj.update_date = today_date
+        obj.date = sales_date
+        obj.current_inventory_quantity = new_inventory_quantity
+        obj.save()
+
+        if request.POST['save'] == 'Save':
+            messages.success(request, f"Sales of {product_name}, {sold_quantity}{product_unit} to {customer} has been saved successfully!")
+            return redirect('sales:sales')
 
 class CsvImportForm(forms.Form):
     file = forms.FileField()

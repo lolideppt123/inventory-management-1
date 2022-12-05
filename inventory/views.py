@@ -204,7 +204,7 @@ class AddInventoryView(LoginRequiredMixin, View):
         obj.inv_type = inv_type
         obj.save()
 
-        models.Inventory.objects.create(
+        new_inventory = models.Inventory.objects.create(
             owner = request.user,
             supplier = supplier,
             product_name = product_name,
@@ -215,7 +215,7 @@ class AddInventoryView(LoginRequiredMixin, View):
         )
 
         if inv_type.name == "Finished Goods":
-            models.InventoryTransactions.objects.create(
+            new_transaction = models.InventoryTransactions.objects.create(
                 owner=request.user, 
                 transaction_type = models.TransactionType.objects.get(name="Inventory"),
                 update_date = today_date,
@@ -224,7 +224,8 @@ class AddInventoryView(LoginRequiredMixin, View):
                 product_name=product_name,
                 quantity=inv_quantity,
                 product_unit=product_unit,
-                current_inventory=current_inventory_quantity
+                current_inventory=current_inventory_quantity,
+                inventory_pk = models.Inventory.objects.get(pk=new_inventory.pk)
             )
 
             # Code for forgot to entry on previous days.
