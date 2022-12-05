@@ -74,6 +74,7 @@
                             <th>Total Cost</th>
                             <th>Margin</th>
                             <th>%Margin</th>
+                            <th></th>
                         </tr>
                     </thead>
                     
@@ -93,7 +94,7 @@
                             <td>{{sale.total_cost|intcomma}}</td>
                             <td>{{sale.margin|intcomma}}</td>
                             <td>{{sale.margin_percent|intcomma}}</td>
-                            {% comment %} <td><a href={% url 'expenses:edit_expense' expense.id %} class="btn btn-secondary btn-sm">Edit</a></td> {% endcomment %}
+                            <td><a href={% url 'sales:edit_sales' sale.id %} class="btn btn-secondary btn-sm">Edit</a></td>
                         </tr>
                         {% endfor %}
                     </tbody>
