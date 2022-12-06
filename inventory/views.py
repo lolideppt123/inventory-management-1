@@ -184,7 +184,6 @@ class AddInventoryView(LoginRequiredMixin, View):
         if product_name.product_unit != product_unit:
             product_unit = ProductUnit.objects.get(name=product_name.product_unit)
             messages.info(request, f"We have changed {product_name} unit to its appropriate unit: \"{product_unit}\"")
-            print(product_unit)
 
         # Updates model
         try:

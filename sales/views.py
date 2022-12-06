@@ -44,6 +44,8 @@ class AddSaleView(LoginRequiredMixin, View):
         return render(request, 'sales/add_sales.html', context)
 
     def post(self, request):
+        inv_trans = InventoryTransactions.objects.all()
+    
         delivery_receipt = request.POST['delivery_receipt']
         invoice = request.POST['invoice']
         sales_date = request.POST['sales_date']
@@ -83,6 +85,11 @@ class AddSaleView(LoginRequiredMixin, View):
         if product_name.product_unit != product_unit:
             product_unit = ProductUnit.objects.get(name=product_name.product_unit)
             messages.info(request, mark_safe(f"We have changed <strong>{product_name}</strong> unit to its appropriate unit: <strong>\"{product_unit}\"</strong>"))
+        # Prevents the User to input sales before starting Inventory
+        for inv in inv_trans[1:2]:
+            if inv.date > datetime.datetime.strptime(sales_date, "%Y-%m-%d").date():
+                messages.error(request, mark_safe(f"Cannot add Sales <strong>BEFORE</strong> beginning Inventory"))
+                return render(request, 'sales/add_sales.html', context)
 
         try:
             # Change this to add inventory type
@@ -174,7 +181,6 @@ class EditSaleView(LoginRequiredMixin, View):
     max_date = datetime.datetime.now().strftime ("%Y-%m-%d")
     def get(self, request, id):
         sales = Sales.objects.get(pk=id)
-        sales_date = sales.date.strftime("%Y-%m-%d")
 
         context = {
             'sales': sales,
@@ -182,7 +188,6 @@ class EditSaleView(LoginRequiredMixin, View):
             'products': self.products,
             'customers': self.customers,
             'product_units': self.product_units,
-            'sales_date': sales_date,
             'max_date': self.max_date,
         }
 
@@ -190,7 +195,7 @@ class EditSaleView(LoginRequiredMixin, View):
 
     def post(self, request, id):
         sales = Sales.objects.get(pk=id)
-        inv_trans = InventoryTransactions.objects.get(sales_pk=sales)
+        inv_trans = InventoryTransactions.objects.all()
         current_total_inventory = CurrentTotalInventory.objects.all()
         today_date = datetime.date.today()
         
@@ -225,6 +230,12 @@ class EditSaleView(LoginRequiredMixin, View):
         if product_name.product_unit != product_unit:
             product_unit = ProductUnit.objects.get(name=product_name.product_unit)
             messages.info(request, mark_safe(f"We have changed <strong>{product_name}</strong> unit to its appropriate unit: <strong>\"{product_unit}\"</strong>"))
+
+        # Prevents the User to input sales before starting Inventory
+        for inv in inv_trans[1:2]:
+            if inv.date > datetime.datetime.strptime(sales_date, "%Y-%m-%d").date():
+                messages.error(request, mark_safe(f"Cannot place Sales <strong>BEFORE</strong> beginning Inventory"))
+                return render(request, 'sales/edit_sales.html', context)
 
         # updates sales not saved yet
         sales.owner=request.user
@@ -265,6 +276,7 @@ class EditSaleView(LoginRequiredMixin, View):
         sales.save()
 
         # Updates a specific InventoryTransaction
+        inv_trans = InventoryTransactions.objects.get(sales_pk=sales)
         inv_trans.owner=request.user
         inv_trans.update_date=today_date
         inv_trans.date=sales_date
