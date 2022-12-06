@@ -8,7 +8,7 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{% url 'sales:sales' %}">Sales</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Add Sales</li>
+            <li class="breadcrumb-item active" aria-current="page">Edit Sales</li>
         </ol>
     </nav>
     {% include 'partials/_messages.html' %}
@@ -29,13 +29,13 @@
 
                     <div class="form-group mb-3">
                         <label for="">Date</label>
-                        <input type="date" class="form-control form-control-sm" id="sales_date" name="sales_date" max="{{max_date}}" value="{{sales_date}}" required/>
+                        <input type="date" class="form-control form-control-sm" id="sales_date" name="sales_date" max="{{max_date}}" value="{{sales.date}}" required/>
                     </div>
 
 
                     <div class="form-group mb-2">
                         <label for="">Customer</label>
-                        <select class="form-select" name="customer" id="customer" >
+                        <select class="form-select" name="customer" id="customer" required>
                             {% for customer in customers %}
                                 {% if sales.customer == customer %}
                                     <option name="customer" value="{{customer}}" selected>{{customer}}</option>

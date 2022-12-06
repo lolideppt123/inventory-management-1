@@ -8,7 +8,8 @@ from userpreferences.models import UserPreference
 from django import forms
 from .models import Customer, Products, Sales, ProductUnit
 from inventory.models import Inventory, InventoryType, CurrentTotalInventory, InventoryTransactions, TransactionType
-from decimal import Decimal
+from decimal import Decimal, InvalidOperation
+from django.utils.safestring import mark_safe
 
 class IndexPageView(LoginRequiredMixin, View):
     login_url = '/authentication/login'
@@ -55,7 +56,6 @@ class AddSaleView(LoginRequiredMixin, View):
         unit_cost = request.POST['unit_cost']
         total_cost = request.POST['total_cost']
         margin = Decimal(total_price) - Decimal(total_cost)
-        margin_percent = margin / Decimal(total_cost)
 
         context = {
             'values': request.POST,
@@ -66,33 +66,23 @@ class AddSaleView(LoginRequiredMixin, View):
             'item_unit': ProductUnit.objects.get(name=product_name.product_unit),
         }
 
-        if not sales_date:
-            messages.error(request, 'Date is required')
+        try:
+            margin_percent = margin / Decimal(total_cost)
+        except InvalidOperation:
+            messages.error(request, mark_safe("Cannot have a <strong>ZERO</strong> as Quantity"))
             return render(request, 'sales/add_sales.html', context)
+
         if not customer or customer == "Choose..." or customer == "Choose":
             messages.error(request, 'Please choose a Customer')
             return render(request, 'sales/add_sales.html', context)
         if not product_name or product_name == "Choose..." or product_name == "Choose":
             messages.error(request, 'Please choose a Product')
             return render(request, 'sales/add_sales.html', context)
-        if not sold_quantity:
-            messages.error(request, 'Quantity is required')
-            return render(request, 'sales/add_sales.html', context)
-        if not product_unit:
-            messages.error(request, 'Product Unit is required')
-            return render(request, 'sales/add_sales.html', context)
-        if not unit_price:
-            messages.error(request, 'Unit price is required')
-            return render(request, 'sales/add_sales.html', context)
-        if not total_price:
-            messages.error(request, 'Total price is required')
-            return render(request, 'sales/add_sales.html', context)
 
         #Check if the user picked the right product unit
         if product_name.product_unit != product_unit:
             product_unit = ProductUnit.objects.get(name=product_name.product_unit)
-            messages.info(request, f"We have changed {product_name} unit to its appropriate unit: \"{product_unit}\"")
-            print(product_unit)
+            messages.info(request, mark_safe(f"We have changed <strong>{product_name}</strong> unit to its appropriate unit: <strong>\"{product_unit}\"</strong>"))
 
         try:
             # Change this to add inventory type
@@ -102,7 +92,7 @@ class AddSaleView(LoginRequiredMixin, View):
                 inv_type=InventoryType.objects.get(name="Finished Goods")
             )
         except CurrentTotalInventory.DoesNotExist:
-            messages.error(request, "We currently don't have this PRODUCT in our Inventory")
+            messages.error(request, mark_safe(f"You currently don't have <strong>{product_name}</strong> in stock"))
             return render(request, 'sales/add_sales.html', context)
 
         qty_on_hand = 0
@@ -110,7 +100,7 @@ class AddSaleView(LoginRequiredMixin, View):
             qty_on_hand = curr_inv.current_inventory_quantity
 
         if qty_on_hand < Decimal(sold_quantity):
-            messages.error(request, 'Not enough Product on hand')
+            messages.error(request, mark_safe(f'Not enough <strong>{product_name}</strong> in stock'))
             return render(request, 'sales/add_sales.html', context)
 
         new_inventory_quantity = qty_on_hand - Decimal(sold_quantity)
@@ -169,10 +159,10 @@ class AddSaleView(LoginRequiredMixin, View):
             obj.save()
 
         if request.POST['save'] == 'Save':
-            messages.success(request, f"Sales of {product_name}, {sold_quantity}{product_unit} to {customer} has been saved successfully!")
+            messages.success(request, mark_safe(f"Sales of <strong>{product_name}</strong>, <strong>{sold_quantity} {product_unit}</strong> to <strong>{customer}</strong> has been saved successfully!"))
             return redirect('sales:sales')
         else:
-            messages.success(request, f"Sales of {product_name}, {sold_quantity}{product_unit} to {customer} has been saved successfully!")
+            messages.success(request, mark_safe(f"Sales of <strong>{product_name}</strong>, <strong>{sold_quantity} {product_unit}</strong> to <strong>{customer}</strong> has been saved successfully!"))
             return redirect('sales:add_sales')
 
 class EditSaleView(LoginRequiredMixin, View):
@@ -188,6 +178,7 @@ class EditSaleView(LoginRequiredMixin, View):
 
         context = {
             'sales': sales,
+            'values': request.GET,
             'products': self.products,
             'customers': self.customers,
             'product_units': self.product_units,
@@ -200,6 +191,7 @@ class EditSaleView(LoginRequiredMixin, View):
     def post(self, request, id):
         sales = Sales.objects.get(pk=id)
         inv_trans = InventoryTransactions.objects.get(sales_pk=sales)
+        current_total_inventory = CurrentTotalInventory.objects.all()
         today_date = datetime.date.today()
         
         delivery_receipt = request.POST['delivery_receipt']
@@ -217,6 +209,7 @@ class EditSaleView(LoginRequiredMixin, View):
         margin_percent = margin / Decimal(total_cost)
 
         context = {
+            'sales': sales,
             'values': request.POST,
             'max_date': self.max_date,
             'products': self.products,
@@ -231,10 +224,9 @@ class EditSaleView(LoginRequiredMixin, View):
         #Check if the user picked the right product unit
         if product_name.product_unit != product_unit:
             product_unit = ProductUnit.objects.get(name=product_name.product_unit)
-            messages.info(request, f"We have changed {product_name} unit to its appropriate unit: \"{product_unit}\"")
-            print(product_unit)
+            messages.info(request, mark_safe(f"We have changed <strong>{product_name}</strong> unit to its appropriate unit: <strong>\"{product_unit}\"</strong>"))
 
-        # updates sales
+        # updates sales not saved yet
         sales.owner=request.user
         sales.delivery_receipt=delivery_receipt
         sales.invoice=invoice
@@ -249,9 +241,30 @@ class EditSaleView(LoginRequiredMixin, View):
         sales.total_cost=total_cost
         sales.margin=margin
         sales.margin_percent=margin_percent
+
+        try:
+            # Change this to add inventory type
+            current_inv_list = CurrentTotalInventory.objects.filter(
+                owner=request.user, 
+                product_name=Products.objects.get(name=product_name),
+                inv_type=InventoryType.objects.get(name="Finished Goods")
+            )
+        except CurrentTotalInventory.DoesNotExist:
+            messages.error(request, mark_safe(f"You currently don't have <strong>{product_name}</strong> in stock"))
+            return render(request, 'sales/edit_sales.html', context)
+
+        qty_on_hand = 0
+        for curr_inv in current_inv_list:
+            qty_on_hand = curr_inv.current_inventory_quantity
+
+        if qty_on_hand < Decimal(sold_quantity):
+            messages.error(request, mark_safe(f'Not enough <strong>{product_name}</strong> in stock'))
+            return render(request, 'sales/edit_sales.html/', context)
+
+        # Saves sale
         sales.save()
 
-        # Updates InventoryTransaction
+        # Updates a specific InventoryTransaction
         inv_trans.owner=request.user
         inv_trans.update_date=today_date
         inv_trans.date=sales_date
@@ -261,35 +274,24 @@ class EditSaleView(LoginRequiredMixin, View):
         inv_trans.product_unit=product_unit
         inv_trans.save()
 
-        # Updates inventorytransaction current_inventory & set new_inventory_quantity value
-        inv_trans = InventoryTransactions.objects.filter(
-            owner=request.user,
-            product_name=product_name,
-        )
-        curr_inventory = 0
-        new_inventory_quantity = 0
-        for inv in inv_trans:
-            obj = InventoryTransactions.objects.get(pk=inv.pk)
-            if obj.transaction_type == TransactionType.objects.get(name="Inventory"):
-                curr_inventory += inv.quantity
-                obj.current_inventory = curr_inventory
-                new_inventory_quantity = obj.current_inventory
-            else:
-                curr_inventory -= inv.quantity
-                obj.current_inventory = curr_inventory
-                new_inventory_quantity = obj.current_inventory
-            obj.save()
-        
-        # Updates CurrentTotalInventory Quantity
-        obj, created = CurrentTotalInventory.objects.get_or_create(owner=request.user, product_name=product_name, inv_type=InventoryType.objects.get(name="Finished Goods"))
-        obj.owner = request.user
-        obj.update_date = today_date
-        obj.date = sales_date
-        obj.current_inventory_quantity = new_inventory_quantity
-        obj.save()
+        # Updates all InventoryTransaction and CurrentTotalInventory
+        for item in current_total_inventory:
+            curr_inventory = 0
+            inv_trans = InventoryTransactions.objects.filter(owner=request.user, product_name=Products.objects.get(name=item.product_name))
+            for inv in inv_trans:
+                if inv.transaction_type == TransactionType.objects.get(name="Inventory"):
+                    curr_inventory += inv.quantity
+                    inv.current_inventory = curr_inventory
+                    item.current_inventory_quantity = curr_inventory
+                else:
+                    curr_inventory -= inv.quantity
+                    inv.current_inventory = curr_inventory
+                    item.current_inventory_quantity = curr_inventory
+                inv.save()
+            item.save()
 
         if request.POST['save'] == 'Save':
-            messages.success(request, f"Sales of {product_name}, {sold_quantity}{product_unit} to {customer} has been saved successfully!")
+            messages.success(request, mark_safe(f"Sales of <strong>{product_name}</strong>, <strong>{sold_quantity} {product_unit}</strong> to <strong>{customer}</strong> has been saved successfully!"))
             return redirect('sales:sales')
 
 class CsvImportForm(forms.Form):
