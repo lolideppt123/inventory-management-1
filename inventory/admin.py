@@ -6,7 +6,7 @@ class CurrentInventoryAdmin(admin.ModelAdmin):
     list_display = ['update_date', 'product_name', 'current_inventory_quantity', 'product_unit', 'inv_type', 'owner']
 
 class InventoryAdmin(admin.ModelAdmin):
-    list_display = ['date', 'product_name', 'inv_quantity', 'product_unit', 'inv_type', 'owner']
+    list_display = ['date', 'supplier', 'product_name', 'inv_quantity', 'product_unit', 'inv_type', 'owner']
 
 class InventoryTransactionAdmin(admin.ModelAdmin):
     list_display = ['date', 'customer_supplier', 'product_name', 'quantity', 'product_unit', 'current_inventory', 'owner', 'sales_pk', 'inventory_pk']

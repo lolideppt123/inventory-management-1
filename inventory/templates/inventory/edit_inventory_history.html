@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container mt-4">
+    
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'inventory:inventory' %}">Inventory</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'inventory:inventory_history' %}">Inventory History</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Edit Inventory Item</li>
+        </ol>
+    </nav>
+    {% include 'partials/_messages.html' %}
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="rounded shadow p-5">
+                <form action="{% url 'inventory:edit_inventory_history' inventory.id %}" method="POST">
+                    {% csrf_token %}
+                    <div class="form-group mb-2">
+                        <label for="">Date</label>
+                        <input type="date" class="form-control form-control-sm" id="inv_date" name="inv_date" max="{{max_date}}" value="{{inventory.date|date:'Y-m-d'}}" autofocus required/>
+                    </div>
+
+                    <div class="form-group mb-2">
+                        <label for="">Supplier</label>
+                        <input type="text" class="form-control form-control-sm" id="supplier" name="supplier" max="{{max_date}}" value="{{inventory.supplier}}" required/>
+                    </div>
+
+                    <div class="form-group mb-2">
+                        <label for="">Product Name</label>
+                        <select class="form-select" name="product_name" id="product_name" required>
+                            {% if inventory.product_name %}
+                                <option name="product_name" value="{{inventory.product_name}}" selected>{{inventory.product_name}}</option>
+                            {% else %}
+                                <option name="product_name" value="" selected>Choose...</option>
+                            {% endif %}
+                            {% for product in products %}
+                                <option name="product_name" value="{{product}}">{{product}}</option>
+                            {% endfor %} 
+                        </select>
+                    </div>
+
+                    <div class="form-group mb-2">
+                        <label for="">Quantity</label>
+                        <input type="number" class="form-control form-control-sm" id="inv_quantity" name="inv_quantity" value="{{inventory.inv_quantity}}" step="0.01" required/>
+                    </div>
+
+                    <div class="form-group mb-2">
+                        <label for="">Unit</label>
+                        <select class="form-select" name="product_unit" id="product_unit" required>
+                            {% for product_unit in product_units %}
+                                {% if inventory.product_unit == product_unit %}
+                                    <option name="product_unit" value="{{product_unit}}" selected>{{product_unit}}</option>
+                                {% else %}
+                                    <option name="product_unit" value="{{product_unit}}">{{product_unit}}</option>
+                                {% endif %}
+                            {% endfor %} 
+                        </select>
+                    </div>
+
+                    <div class="form-group mb-2">
+                        <label for="">Inventory Type</label>
+                        <select class="form-select" name="inv_type" id="inv_type" required>
+                            {% for inv in inventory_type %}
+                                {% if inventory.inv_type == inv %}
+                                    <option name="inv_type" value="{{inv}}" selected>{{inv}}</option>
+                                {% else %}
+                                    <option name="inv_type" value="{{inv}}">{{inv}}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <input type="submit" value="Save" class="btn btn-primary btn-primary-sm" name="save" />
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

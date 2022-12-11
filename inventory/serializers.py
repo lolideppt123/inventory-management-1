@@ -40,5 +40,7 @@ class InventoryTransactionsSerializer(serializers.ModelSerializer):
             'quantity',
             'product_unit',
             'current_inventory',
+            'sales_pk',
+            'inventory_pk',
         )
 

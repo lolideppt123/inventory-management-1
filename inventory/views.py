@@ -13,6 +13,7 @@ import json
 from django.http import JsonResponse
 from rest_framework.response import Response
 from django.core.serializers.json import DjangoJSONEncoder
+from django.utils.safestring import mark_safe
 
 # Create your views here.
 
@@ -183,7 +184,7 @@ class AddInventoryView(LoginRequiredMixin, View):
         #Check if the user picked the right product unit
         if product_name.product_unit != product_unit:
             product_unit = ProductUnit.objects.get(name=product_name.product_unit)
-            messages.info(request, f"We have changed {product_name} unit to its appropriate unit: \"{product_unit}\"")
+            messages.info(request, mark_safe(f"We have changed <strong>{product_name}</strong> unit to its appropriate unit: <strong>\"{product_unit}\"</strong>"))
 
         # Updates model
         try:
@@ -248,10 +249,10 @@ class AddInventoryView(LoginRequiredMixin, View):
                 messages.success(request, "Raw Material saved successfully!")
                 return redirect('inventory:raw_materials')
             else:
-                messages.success(request, f"Successfully added {product_name} to inventory!")
+                messages.success(request, mark_safe(f"Successfully added <strong>{product_name}</strong> to inventory!"))
                 return redirect('inventory:finished_goods')
         else:
-            messages.success(request, f"Successfully added {product_name} to inventory!")
+            messages.success(request, mark_safe(f"Successfully added <strong>{product_name}</strong> to inventory!"))
             return redirect('inventory:add_inventory')
         
 
@@ -272,8 +273,109 @@ class InventoryHistoryView(LoginRequiredMixin, View):
         inventory_transaction = models.InventoryTransactions.objects.filter(owner=request.user, product_name=product_name)
         inventory_transaction_serializer = InventoryTransactionsSerializer(inventory_transaction, many=True)
 
-        print(inventory_transaction_serializer.data)
-
-
         return JsonResponse(list(inventory_transaction_serializer.data), safe=False)
   
+class EditInventoryHistoryView(LoginRequiredMixin, View):
+    login_url = '/authentication/login'
+    products = Products.objects.all()
+    product_units = ProductUnit.objects.all()
+    inventory_type = models.InventoryType.objects.all()
+    max_date = datetime.datetime.now().strftime ("%Y-%m-%d")
+
+    def get(self, request, id):
+        inventory = models.Inventory.objects.get(pk=id)
+        context = {
+            'inventory': inventory,
+            'products': self.products,
+            'product_units': self.product_units,
+            'inventory_type': self.inventory_type,
+            'max_date': self.max_date,
+        }
+        return render(request, 'inventory/edit_inventory_history.html', context)
+        
+    def post(self, request, id):
+        inventory = models.Inventory.objects.get(pk=id)
+        current_total_inventory = models.CurrentTotalInventory.objects.all()
+        today_date = datetime.date.today()
+
+        product_name = Products.objects.get(name=request.POST['product_name'])
+        supplier = request.POST['supplier']
+        inv_quantity = request.POST['inv_quantity']
+        product_unit = ProductUnit.objects.get(name=request.POST['product_unit'])
+        inv_date = request.POST['inv_date']
+        inv_type = models.InventoryType.objects.get(name=request.POST['inv_type'])
+
+        context = {
+            'values': request.POST,
+            'max_date': self.max_date,
+        }
+
+        if not product_name or product_name == "Choose..." or product_name == "Choose":
+            messages.error(request, 'Please choose a Product')
+            return render(request, 'inventory/add_inventory.html', context)
+
+        #Check if the user picked the right product unit
+        if product_name.product_unit != product_unit:
+            product_unit = ProductUnit.objects.get(name=product_name.product_unit)
+            messages.info(request, mark_safe(f"We have changed <strong>{product_name}</strong> unit to its appropriate unit: <strong>\"{product_unit}\"</strong>"))
+
+        # Updates inventory
+        inventory.owner=request.user
+        inventory.supplier = supplier
+        inventory.product_name = product_name
+        inventory.product_unit = product_unit
+        inventory.date = inv_date
+        inventory.inv_quantity = inv_quantity
+        inventory.inv_type = inv_type
+        inventory.save()
+
+        # Updates InventoryTransaction
+        inv_trans = models.InventoryTransactions.objects.get(inventory_pk=inventory)
+        inv_trans.owner=request.user
+        inv_trans.update_date=today_date
+        inv_trans.date=inv_date
+        inv_trans.customer_supplier=supplier
+        inv_trans.product_name=product_name
+        inv_trans.quantity=inv_quantity
+        inv_trans.product_unit=product_unit
+        inv_trans.save()
+
+        # Creates a CurrentTotalInventory object if does not exist
+        for inv in models.InventoryTransactions.objects.all():
+            try:
+                curr_inv = models.CurrentTotalInventory.objects.get(product_name=inv.product_name)
+            except models.CurrentTotalInventory.DoesNotExist:
+                curr_inv = models.CurrentTotalInventory.objects.create(
+                    owner=request.user,
+                    update_date = today_date,
+                    date = inv_date,
+                    product_name = product_name,
+                    current_inventory_quantity = 0,
+                    product_unit = product_unit,
+                    inv_type = inv_type,
+                )
+
+        # Updates all InventoryTransaction and CurrentTotalInventory Running Inventory
+        for item in current_total_inventory:
+            curr_inventory = 0
+            inv_trans = models.InventoryTransactions.objects.filter(owner=request.user, product_name=Products.objects.get(name=item.product_name))
+            if inv_trans:
+                for inv in inv_trans:
+                    if inv.transaction_type == models.TransactionType.objects.get(name="Inventory"):
+                        curr_inventory += inv.quantity
+                        inv.current_inventory = curr_inventory
+                        item.current_inventory_quantity = curr_inventory
+                    else:
+                        curr_inventory -= inv.quantity
+                        inv.current_inventory = curr_inventory
+                        item.current_inventory_quantity = curr_inventory
+                    inv.save()
+                item.save()
+            else:
+                item.current_inventory_quantity = 0
+            item.save()
+
+        if request.POST['save'] == 'Save':
+            messages.success(request, mark_safe(f"Inventory of <strong>{product_name}</strong>, <strong>{inv_quantity} {product_unit}</strong> from <strong>{supplier}</strong> has been saved successfully!"))
+            return redirect('inventory:finished_goods')
+        

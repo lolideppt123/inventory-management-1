@@ -10,6 +10,7 @@ urlpatterns = [
     path('finished-goods/', views.FinishedGoodsView.as_view(), name='finished_goods'),
     path('add-inventory/', csrf_exempt(views.AddInventoryView.as_view()), name='add_inventory'),
     path('inventory-history/', csrf_exempt(views.InventoryHistoryView.as_view()), name='inventory_history'),
+    path('edit-inventory-history/<id>', csrf_exempt(views.EditInventoryHistoryView.as_view()), name='edit_inventory_history'),
     
     # path('add_income', views.AddIncomeView.as_view(), name='add_income'),
     # path('edit-income/<id>', views.EditIncomeView.as_view(), name='edit_income'),
