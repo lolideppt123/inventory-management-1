@@ -10,12 +10,16 @@ from .models import Customer, Products, Sales, ProductUnit
 from inventory.models import Inventory, InventoryType, CurrentTotalInventory, InventoryTransactions, TransactionType
 from decimal import Decimal, InvalidOperation
 from django.utils.safestring import mark_safe
+import json
+from django.http import JsonResponse
+from django.db.models import Q
+from .serializers import SalesSerializer
 
 class IndexPageView(LoginRequiredMixin, View):
     login_url = '/authentication/login'
     def get(self, request):
         sales = Sales.objects.filter(owner=request.user)
-        paginator = Paginator(sales, 10)
+        paginator = Paginator(sales, 15)
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
 
@@ -305,6 +309,23 @@ class EditSaleView(LoginRequiredMixin, View):
         if request.POST['save'] == 'Save':
             messages.success(request, mark_safe(f"Sales of <strong>{product_name}</strong>, <strong>{sold_quantity} {product_unit}</strong> to <strong>{customer}</strong> has been saved successfully!"))
             return redirect('sales:sales')
+
+class SearchSalesView(LoginRequiredMixin,View):
+    login_url = '/authentication/login'
+
+    def post(self, request):
+        search_str = json.loads(request.body).get('fieldValue', '')
+        # https://stackoverflow.com/questions/41605962/how-to-use-incontains-for-filtering-by-using-foreignkey-in-django
+        sales = Sales.objects.filter(
+            Q(delivery_receipt__istartswith=search_str) |
+            Q(invoice__istartswith=search_str) |
+            Q(date__icontains=search_str) |
+            Q(customer__name__istartswith=search_str) |
+            Q(product_name__name__istartswith=search_str)
+        )
+        sales_serializer = SalesSerializer(sales, many=True)
+
+        return JsonResponse(list(sales_serializer.data), safe=False)
 
 class CsvImportForm(forms.Form):
     file = forms.FileField()

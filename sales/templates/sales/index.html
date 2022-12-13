@@ -32,22 +32,19 @@
                         <li><a href="{% url 'sales:product_upload' %}" class="dropdown-item">Products</a></li>
                         <li><a href="{% url 'sales:sales_upload' %}" class="dropdown-item">Sales</a></li>
                     </ul>
-                    {% comment %} <div class="btn-group">
-						<a href="{% url 'sales:customer_upload' %}" class="btn-secondary" id="">
-							Import
-                        </a>
-                    </div> {% endcomment %}
-					<div class="btn-group me-2">
-						<button class="btn btn-secondary dropdown-toggle" type="button" id="defaultDropdown2" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
-							Export
-						</button>
-						<ul class="dropdown-menu" aria-labelledby="defaultDropdown2">
-						  <li><a href="#" class="dropdown-item">CSV</a></li>
-						  <li><a href="#" class="dropdown-item">Excel</a></li>
-						  {% comment %} <li><a href="{% url 'expenses:export_pdf' %}" class="dropdown-item">PDF</a></li> {% endcomment %}
-						</ul>
-					</div>
-				</div>
+                </div>
+
+                <div class="btn-group me-2">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="defaultDropdown2" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
+                        Export
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="defaultDropdown2">
+                        <li><a href="#" class="dropdown-item">CSV</a></li>
+                        <li><a href="#" class="dropdown-item">Excel</a></li>
+                        {% comment %} <li><a href="{% url 'expenses:export_pdf' %}" class="dropdown-item">PDF</a></li> {% endcomment %}
+                    </ul>
+                </div>
+                
 				<div class="btn-group me-5">
 					<a href="{% url 'sales:add_sales' %}" class="btn btn-primary">Add Sale</a>
 				</div>
@@ -55,7 +52,6 @@
         </div>
 
         <div class="container">
-
             {% if sales.count %}
             <div class="app-table">
                 <table class="table table-striped table-hover table-sm">
@@ -100,32 +96,57 @@
                     </tbody>
                     
                 </table>
-
-                <div class="pagination-container">
-                    <nav>
-                        <ul class="pagination pagination-sm justify-content-end">
-                        {% if page_obj.has_previous %}
-                            <li class="page-item"><a class="page-link" href="?page=1">&laquo First</a></li>
-                            <li class="page-item"><a class="page-link" href="?page={{page_obj.previous_page_number}}">Previous</a></li>
-                        {% else %}
-                            <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1" aria-disabled="true">&laquo First</a></li>
-                            <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a></li>
-                        {% endif %}
-                        <li class="page-item disabled"><a class="page-link" aria-disabled="true" href="#">Page {{page_obj.number}} of {{page_obj.paginator.num_pages}}</a></li>
-                        {% if page_obj.has_next %}
-                            <li class="page-item"><a class="page-link" href="?page={{page_obj.next_page_number}}">Next</a></li>
-                            <li class="page-item"><a class="page-link" href="?page={{page_obj.paginator.num_pages}}">Last &raquo</a></li>
-                        {% else %}
-                        <li class="page-item disabled"><a class="page-link" href="" tabindex="-1" aria-disabled="true">Next</a></li>
-                        <li class="page-item disabled"><a class="page-link" href="" tabindex="-1" aria-disabled="true">Last &raquo</a></li>
-                        {% endif %}
-                        </ul>
-                    </nav>
-                </div>
             </div>
             {% endif %}
 
-        </div>
+            <div class="output-table">
+                <table class="table table-striped table-hover table-sm">
+                    <thead>
+                        <tr>
+                            <th>DR</th>
+                            <th>Invoice</th>
+                            <th>Date</th>
+                            <th>Customer</th>
+                            <th>Product</th>
+                            <th>Quantity</th>
+                            <th>Units</th>
+                            <th>U/Price</th>
+                            <th>Sales</th>
+                            <th>U/Cost</th>
+                            <th>Total Cost</th>
+                            <th>Margin</th>
+                            <th>%Margin</th>
+                        </tr>
+                    </thead>
+                    <tbody class="output-table-body">
+    
+                    </tbody>
+                </table>
+            </div>
+            <div class="no-result-display"><p>No result Found</p></div>
 
+            <div class="pagination-container">
+                <nav>
+                    <ul class="pagination pagination-sm justify-content-end">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item"><a class="page-link" href="?page=1">&laquo First</a></li>
+                        <li class="page-item"><a class="page-link" href="?page={{page_obj.previous_page_number}}">Previous</a></li>
+                    {% else %}
+                        <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1" aria-disabled="true">&laquo First</a></li>
+                        <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a></li>
+                    {% endif %}
+                    <li class="page-item disabled"><a class="page-link" aria-disabled="true" href="#">Page {{page_obj.number}} of {{page_obj.paginator.num_pages}}</a></li>
+                    {% if page_obj.has_next %}
+                        <li class="page-item"><a class="page-link" href="?page={{page_obj.next_page_number}}">Next</a></li>
+                        <li class="page-item"><a class="page-link" href="?page={{page_obj.paginator.num_pages}}">Last &raquo</a></li>
+                    {% else %}
+                    <li class="page-item disabled"><a class="page-link" href="" tabindex="-1" aria-disabled="true">Next</a></li>
+                    <li class="page-item disabled"><a class="page-link" href="" tabindex="-1" aria-disabled="true">Last &raquo</a></li>
+                    {% endif %}
+                    </ul>
+                </nav>
+            </div>
+        </div>
+<script src="{% static 'js/search_sales.js' %}"></script>
 {% endblock content %}
 

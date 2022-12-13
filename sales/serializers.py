@@ -8,6 +8,7 @@ class SalesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Sales
         fields = (
+            'pk',
             'delivery_receipt',
             'invoice',
             'date',
@@ -15,6 +16,10 @@ class SalesSerializer(serializers.ModelSerializer):
             'product_name',
             'sold_quantity',
             'product_unit',
-            'current_inventory',
+            'unit_price',
+            'total_price',
+            'unit_cost',
+            'total_cost',
+            'margin',
+            'margin_percent',
         )
-
