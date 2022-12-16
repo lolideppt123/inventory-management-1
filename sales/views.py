@@ -327,9 +327,6 @@ class SearchSalesView(LoginRequiredMixin,View):
 
         return JsonResponse(list(sales_serializer.data), safe=False)
 
-class CsvImportForm(forms.Form):
-    file = forms.FileField()
-
 def productuploadcsv(request):
     if request.method == "POST":
 
@@ -351,9 +348,9 @@ def productuploadcsv(request):
             print(product_list)
         ############################################
 
-    form = CsvImportForm()
-    context = {"form": form}
-    return render(request, 'sales/product_upload.html', context)
+        messages.success(request, mark_safe(f"You've Successfully uploaded your file. It would take atleast 3-5 minutes to reflect on our system. "))
+        return render(request, 'sales/product_upload.html')
+    return render(request, 'sales/product_upload.html')
 
 def salesuploadcsv(request):
     if request.method == "POST":
@@ -384,9 +381,9 @@ def salesuploadcsv(request):
             # )
         ###############################################
 
-    form = CsvImportForm()
-    context = {"form": form}
-    return render(request, 'sales/sales_upload.html', context)
+        messages.success(request, mark_safe(f"You've Successfully uploaded your file. It would take atleast 3-5 minutes to reflect on our system. "))
+        return render(request, 'sales/product_upload.html')
+    return render(request, 'sales/sales_upload.html')
 
 def customeruploadcsv(request):
     
@@ -429,7 +426,7 @@ def customeruploadcsv(request):
 
 
 
-    form = CsvImportForm()
-    context = {"form": form}
-    return render(request, 'sales/customer_upload.html', context)
+        messages.success(request, mark_safe(f"You've Successfully uploaded your file. It would take atleast 3-5 minutes to reflect on our system. "))
+        return render(request, 'sales/product_upload.html')
+    return render(request, 'sales/customer_upload.html')
 

@@ -2,13 +2,23 @@
 {% load static %}
 
 {% block content %}
+<link href="{% static 'css/_main_uploads.css' %}" rel="stylesheet">
 
-<div>
-    <form action="{% url 'sales:sales_upload' %}" method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{form.as_p}}
-        <button type="submit">Upload</button>
-    </form>
+<div class="container mt-4">
+    {% include 'partials/_messages.html' %}
+    <div class="contentarea">
+        <h4>Upload Products CSV File Here</h4>
+        <section class="droparea">
+            
+            <form action="{% url 'sales:sales_upload' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <label for="id_file">File:</label>
+                <input type="file" name="file" id="id_file" accept=".csv,text/csv" required>
+                
+                <button id="submit_btn" type="submit">Upload</button>
+            </form>
+        </section>
+    </div>
 </div>
 
 {% endblock content %}
