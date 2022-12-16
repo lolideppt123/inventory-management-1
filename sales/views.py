@@ -370,18 +370,18 @@ def salesuploadcsv(request):
 
             print(new_data)
 
-            create = Sales.objects.create(
-                owner=request.user,
-                delivery_receipt=new_data[0],
-                invoice=new_data[1],
-                sales_date=new_data[2],
-                customer=Customer.objects.get(name=new_data[3]),
-                product_name=Products.objects.get(name=new_data[4]),
-                sold_quantity=new_data[5],
-                product_unit=ProductUnit.objects.get(name=new_data[6]),
-                unit_price=new_data[7],
-                total_price=new_data[8]
-            )
+            # create = Sales.objects.create(
+            #     owner=request.user,
+            #     delivery_receipt=new_data[0],
+            #     invoice=new_data[1],
+            #     sales_date=new_data[2],
+            #     customer=Customer.objects.get(name=new_data[3]),
+            #     product_name=Products.objects.get(name=new_data[4]),
+            #     sold_quantity=new_data[5],
+            #     product_unit=ProductUnit.objects.get(name=new_data[6]),
+            #     unit_price=new_data[7],
+            #     total_price=new_data[8]
+            # )
         ###############################################
 
     form = CsvImportForm()

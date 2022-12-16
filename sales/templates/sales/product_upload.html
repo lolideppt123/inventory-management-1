@@ -4,7 +4,7 @@
 {% block content %}
 
 <div>
-    <form action="{% url 'sales:customer_upload' %}" method="POST" enctype="multipart/form-data">
+    <form action="{% url 'sales:product_upload' %}" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         {{form.as_p}}
         <button type="submit">Upload</button>
