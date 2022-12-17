@@ -12,7 +12,7 @@ from decimal import Decimal, InvalidOperation
 from django.utils.safestring import mark_safe
 import json
 from django.http import JsonResponse
-from django.db.models import Q
+from django.db.models import Q, Sum
 from .serializers import SalesSerializer
 
 class IndexPageView(LoginRequiredMixin, View):
@@ -326,6 +326,48 @@ class SearchSalesView(LoginRequiredMixin,View):
         sales_serializer = SalesSerializer(sales, many=True)
 
         return JsonResponse(list(sales_serializer.data), safe=False)
+
+class SalesStatisticsView(LoginRequiredMixin, View):
+    login_url = '/authentication/login'
+    def get(self, request):
+        # sales_statistics(request)
+        return render(request, 'sales/sales_summary.html')
+
+def product_sales_summary(request):
+
+    data_list = []
+    for product in Products.objects.all():
+        sales = Sales.objects.filter(product_name=product.pk)
+        if sales.exists():
+            query_product_sales = sales.aggregate(total_sales=Sum('total_price'))
+            query_product_cost = sales.aggregate(total_cost=Sum('total_cost'))
+            query_product_margin = sales.aggregate(total_margin=Sum('margin'))
+
+            data_set = {'product_name': product.name}
+            data_set.update(query_product_sales)
+            data_set.update(query_product_cost)
+            data_set.update(query_product_margin)
+            data_list.append(data_set)
+    # print(data_list, "\n")
+    return JsonResponse({'sales_data': data_list}, safe=False)
+
+def customer_sales_summary(request):
+
+    data_list = []
+    for customer in Customer.objects.all():
+        sales = Sales.objects.filter(customer=customer.pk)
+        if sales.exists():
+            query_customer_sales = sales.aggregate(total_sales=Sum('total_price'))
+            query_customer_cost = sales.aggregate(total_cost=Sum('total_cost'))
+            query_customer_margin = sales.aggregate(total_margin=Sum('margin'))
+            
+            data_set = ({'customer_name': customer.name})
+            data_set.update(query_customer_sales)
+            data_set.update(query_customer_cost)
+            data_set.update(query_customer_margin)
+            data_list.append(data_set)
+    # print(data_list, "\n")
+    return JsonResponse({'sales_data': data_list}, safe=False)
 
 def productuploadcsv(request):
     if request.method == "POST":
