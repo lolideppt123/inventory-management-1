@@ -4,7 +4,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 import datetime
 from django.contrib import messages
 from django.core.paginator import Paginator
-from userpreferences.models import UserPreference
 from django import forms
 from .models import Customer, Products, Sales, ProductUnit
 from inventory.models import Inventory, InventoryType, CurrentTotalInventory, InventoryTransactions, TransactionType
@@ -334,10 +333,16 @@ class SalesStatisticsView(LoginRequiredMixin, View):
         return render(request, 'sales/sales_summary.html')
 
 def product_sales_summary(request):
+    body_unicode = request.body.decode('utf-8')
+    body = json.loads(body_unicode)
+
+    # Converts date into proper format
+    startDate = datetime.datetime.strptime(body['dateStart'].strip(), "%m/%d/%Y").date()
+    dateEnd = datetime.datetime.strptime(body['dateEnd'].strip(), "%m/%d/%Y").date()
 
     data_list = []
     for product in Products.objects.all():
-        sales = Sales.objects.filter(product_name=product.pk)
+        sales = Sales.objects.filter(date__gte=startDate, date__lte=dateEnd, product_name=product.pk)
         if sales.exists():
             query_product_sales = sales.aggregate(total_sales=Sum('total_price'))
             query_product_cost = sales.aggregate(total_cost=Sum('total_cost'))
@@ -352,10 +357,16 @@ def product_sales_summary(request):
     return JsonResponse({'sales_data': data_list}, safe=False)
 
 def customer_sales_summary(request):
+    body_unicode = request.body.decode('utf-8')
+    body = json.loads(body_unicode)
+
+    # Converts date into proper format
+    startDate = datetime.datetime.strptime(body['dateStart'].strip(), "%m/%d/%Y").date()
+    dateEnd = datetime.datetime.strptime(body['dateEnd'].strip(), "%m/%d/%Y").date()
 
     data_list = []
     for customer in Customer.objects.all():
-        sales = Sales.objects.filter(customer=customer.pk)
+        sales = Sales.objects.filter(date__gte=startDate, date__lte=dateEnd, customer=customer.pk)
         if sales.exists():
             query_customer_sales = sales.aggregate(total_sales=Sum('total_price'))
             query_customer_cost = sales.aggregate(total_cost=Sum('total_cost'))

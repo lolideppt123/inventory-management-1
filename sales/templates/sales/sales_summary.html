@@ -13,6 +13,14 @@
                 </ol>
             </nav>
         </div>
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <div class="col-sm-4">
+                <div id="reportrange" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
+                    <span id="datePicked"></span> <i class="float-end" data-feather="calendar"></i>
+                </div>
+            </div>
+
+        </div>
         <div class="chart-wrapper">
             {% comment %} <canvas id="myTotalSalesChart" width="200" height="200"></canvas> {% endcomment %}
             <canvas id="myTotalCustomerSalesChart" width="400" height="150"></canvas>
@@ -28,8 +36,6 @@
     
     
 </div>
-
-
 
 <script src="{% static 'js/sales_summary.js' %}"></script>
 
