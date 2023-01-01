@@ -14,6 +14,7 @@ from django.http import JsonResponse
 from rest_framework.response import Response
 from django.core.serializers.json import DjangoJSONEncoder
 from django.utils.safestring import mark_safe
+from django.db.models import Sum
 
 # Create your views here.
 
@@ -379,3 +380,31 @@ class EditInventoryHistoryView(LoginRequiredMixin, View):
             messages.success(request, mark_safe(f"Inventory of <strong>{product_name}</strong>, <strong>{inv_quantity} {product_unit}</strong> from <strong>{supplier}</strong> has been saved successfully!"))
             return redirect('inventory:finished_goods')
         
+class InventorySummaryView(LoginRequiredMixin,View):
+    login_url = '/authentication/login'
+    def get(self, request):
+        context = {"max_date": datetime.date.today()}
+        return render(request, 'inventory/inventory_summary.html', context)
+
+def quantity_sales_summary(request):
+    body_unicode = request.body.decode('utf-8')
+    body = json.loads(body_unicode)
+    print(body)
+
+    # Converts date into proper format
+    startDate = datetime.datetime.strptime(body['dateStart'].strip(), "%m/%d/%Y").date()
+    dateEnd = datetime.datetime.strptime(body['dateEnd'].strip(), "%m/%d/%Y").date()
+
+    data_list = []
+    for product in Products.objects.all():
+        sales = Sales.objects.filter(date__gte=startDate, date__lte=dateEnd, product_name=product.pk)
+        if sales.exists():
+            query_sold_quantity = sales.aggregate(sold_quantity=Sum('sold_quantity'))
+            # query_product_cost = sales.aggregate(total_cost=Sum('total_cost'))
+            # query_product_margin = sales.aggregate(total_margin=Sum('margin'))
+
+            data_set = {'product_name': product.name}
+            data_set.update(query_sold_quantity)
+            data_list.append(data_set)
+    # print(data_list, "\n")
+    return JsonResponse({'sales_data': data_list}, safe=False)

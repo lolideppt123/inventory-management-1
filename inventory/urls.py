@@ -11,6 +11,8 @@ urlpatterns = [
     path('add-inventory/', csrf_exempt(views.AddInventoryView.as_view()), name='add_inventory'),
     path('inventory-history/', csrf_exempt(views.InventoryHistoryView.as_view()), name='inventory_history'),
     path('edit-inventory-history/<id>', csrf_exempt(views.EditInventoryHistoryView.as_view()), name='edit_inventory_history'),
+    path('inventory-summary', views.InventorySummaryView.as_view(), name='inventory_summary'),
+    path('quantity-sales-summary', csrf_exempt(views.quantity_sales_summary), name='quantity_sales_summary'),
     
     # path('add_income', views.AddIncomeView.as_view(), name='add_income'),
     # path('edit-income/<id>', views.EditIncomeView.as_view(), name='edit_income'),
