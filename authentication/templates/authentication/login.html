@@ -3,31 +3,36 @@
 {% extends 'base_auth.html' %}
 {% load static %}
 
+
+
 {% block content %}
 <link href="{% static 'css/login.css' %}" rel="stylesheet">
+
 <div class="row">
     <div class="col-md-4"></div>
     <div class="col-md-4">
         <div class="card mt-5">
             <div class="card-body">
 
-                <div class="card-title py-3">
-                    <h4>Please login to your account</h4>
+                <div class="card-title py-4">
+                    <h3>Account Login</h3>
                 </div>
 
-                <form action="{% url 'login' %}" method="post">
+                <form action="{% url 'login' %}" method="post" class="login-form">
                     {% csrf_token %}
                     {% include 'partials/_messages.html' %}
 
                     <div class="mb-2">
-                        <label for="usernameField" class="form-label">Username</label>
-                        <input placeholder="Username" type="text" name="username" id="usernameField" class="form-control" value="{{fieldValues.username}}" required />
+                        
+                        <input placeholder="Username" type="text" name="username" id="usernameField" class="input form-control" value="{{fieldValues.username}}" required />
+                        <i data-feather="user"></i>
                     </div>
                     <div class="username-feedback invalid-feedback" style="display:none;"></div>
 
                     <div class="mb-2">
-                        <label for="passwordField" class="form-label">Password</label>
-                        <input placeholder="Password" type="password" name="password" id="passwordField" class="form-control" value="" required />
+                        
+                        <input placeholder="Password" type="password" name="password" id="passwordField" class="input form-control" value="" required />
+                        <i data-feather="lock"></i>
                         <small class="float-end py-2 passwordToggle">SHOW</small>
                     </div>
                     <div class="password-feedback invalid-feedback" style="display:none;"></div>
