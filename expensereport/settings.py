@@ -22,7 +22,7 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Database connection for railway
-DATABASE_URL = "postgresql://postgres:7xXk6MIAQsW6U2WXs7yP@containers-us-west-37.railway.app:6581/railway"
+DATABASE_URL = "postgresql://postgres:vhUq3iw2CFhoM4BoLDBS@containers-us-west-100.railway.app:6343/railway"
 
 
 # Quick-start development settings - unsuitable for production
@@ -98,16 +98,20 @@ WSGI_APPLICATION = 'expensereport.wsgi.application'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 # New database connection credentials for railway
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DB_NAME'),
-        'USER': os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_USER_PASSWORD'),
-        'HOST': os.environ.get('DB_HOST'),
-        'PORT': os.environ.get('DB_PORT'),
-    }
+DATABASE = {
+    'default': { dj_database_url.config(default=DATABASE_URL) },
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': os.environ.get('DB_NAME'),
+#         'USER': os.environ.get('DB_USER'),
+#         'PASSWORD': os.environ.get('DB_USER_PASSWORD'),
+#         'HOST': os.environ.get('DB_HOST'),
+#         'PORT': os.environ.get('DB_PORT'),
+#     }
+# }
 
 
 # Password validation
