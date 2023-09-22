@@ -99,7 +99,7 @@ WSGI_APPLICATION = 'expensereport.wsgi.application'
 
 # New database connection credentials for railway
 DATABASE = {
-    'default': { dj_database_url.config(default=DATABASE_URL) },
+    'default': dj_database_url.config(default=DATABASE_URL) ,
 }
 
 # DATABASES = {
