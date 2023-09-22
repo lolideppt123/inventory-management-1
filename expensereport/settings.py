@@ -204,11 +204,11 @@ DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 STATICFILES_STORAGE = 'storages.backends.s3boto3.S3StaticStorage'
 
 
-CSRF_TRUSTED_ORIGINS = ['https://metserv-inventory-management.up.railway.app/*']
-CSRF_COOKIE_DOMAIN = 'metserv-inventory-management.up.railway.app'
+CSRF_TRUSTED_ORIGINS = ['https://inventory-management-1-production.up.railway.app/*']
+CSRF_COOKIE_DOMAIN = 'inventory-management-1-production.up.railway.app'
 
 CORS_ORIGIN_WHITELIST = (
-    'https://metserv-inventory-management.up.railway.app',
+    'https://inventory-management-1-production.up.railway.app',
 )
 CORS_REPLACE_HTTPS_REFERER = True
 CORS_ALLOW_CREDENTIALS = True
