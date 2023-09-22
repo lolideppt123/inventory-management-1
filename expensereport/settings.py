@@ -22,7 +22,7 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Database connection for railway
-DATABASE_URL = "postgresql://postgres:vhUq3iw2CFhoM4BoLDBS@containers-us-west-100.railway.app:6343/railway"
+DATABASE_URL = "postgresql://postgres:nUbpii5aLVhcmGZo2S91@containers-us-west-150.railway.app:6089/railway"
 
 
 # Quick-start development settings - unsuitable for production
@@ -98,9 +98,9 @@ WSGI_APPLICATION = 'expensereport.wsgi.application'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 # New database connection credentials for railway
-# DATABASE = {
-#     'default': { dj_database_url.config(default=DATABASE_URL) },
-# }
+DATABASE = {
+    'default': { dj_database_url.config(default=DATABASE_URL) },
+}
 
 # DATABASES = {
 #     'default': {
