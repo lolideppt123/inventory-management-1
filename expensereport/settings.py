@@ -98,9 +98,9 @@ WSGI_APPLICATION = 'expensereport.wsgi.application'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 # New database connection credentials for railway
-DATABASE = {
-    'default': dj_database_url.config(default=DATABASE_URL) ,
-}
+# DATABASE = {
+#     'default': dj_database_url.config(default=DATABASE_URL) ,
+# }
 
 # DATABASES = {
 #     'default': {
@@ -112,6 +112,17 @@ DATABASE = {
 #         'PORT': os.environ.get('DB_PORT'),
 #     }
 # }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'railway',
+        'USER': 'postgres',
+        'PASSWORD': 'nUbpii5aLVhcmGZo2S91',
+        'HOST': 'containers-us-west-150.railway.app',
+        'PORT': '6089',
+    }
+}
 
 
 # Password validation
