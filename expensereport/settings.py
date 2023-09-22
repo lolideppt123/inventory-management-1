@@ -98,9 +98,9 @@ WSGI_APPLICATION = 'expensereport.wsgi.application'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 # New database connection credentials for railway
-DATABASE = {
-    'default': { dj_database_url.config(default=DATABASE_URL) },
-}
+# DATABASE = {
+#     'default': { dj_database_url.config(default=DATABASE_URL) },
+# }
 
 # DATABASES = {
 #     'default': {
