@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 from pathlib import Path
 import os
+import dj_database_url # import for railway database connection
 from dotenv import load_dotenv
 import django_heroku
 from django.contrib import messages
@@ -19,6 +20,9 @@ load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Database connection for railway
+DATABASE_URL = "postgresql://postgres:7xXk6MIAQsW6U2WXs7yP@containers-us-west-37.railway.app:6581/railway"
 
 
 # Quick-start development settings - unsuitable for production
@@ -93,6 +97,7 @@ WSGI_APPLICATION = 'expensereport.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+# New database connection credentials for railway
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
