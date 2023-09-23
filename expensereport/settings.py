@@ -102,6 +102,7 @@ WSGI_APPLICATION = 'expensereport.wsgi.application'
 #     'default': dj_database_url.config(default=DATABASE_URL) ,
 # }
 
+# uncomment when redeploying. comment when creating/migrating locally 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -112,7 +113,6 @@ DATABASES = {
         'PORT': os.environ.get('DB_PORT'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators

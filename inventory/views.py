@@ -28,7 +28,7 @@ class FinishedGoodsView(LoginRequiredMixin, View):
     login_url = '/authentication/login'
 
     def get(self, request):
-        current_inv = models.CurrentTotalInventory.objects.filter(owner=request.user, inv_type=models.InventoryType.objects.get(name="Finished Goods"))
+        current_inv = models.CurrentTotalInventory.objects.filter(owner=request.user)
         paginator = Paginator(current_inv, 10)
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
