@@ -9,19 +9,18 @@
 <link href="{% static 'css/login.css' %}" rel="stylesheet">
 
 <div class="row">
-    <div class="col-md-4"></div>
-    <div class="col-md-4">
+    
+    <div class="col-form">
         <div class="card mt-5">
-            <div class="card-body">
-
+            <div class="card-body pb-3">
+                
                 <div class="card-title py-4">
-                    <h3>Account Login</h3>
+                    <h3>Sign in</h3>
                 </div>
 
                 <form action="{% url 'login' %}" method="post" class="login-form">
                     {% csrf_token %}
                     {% include 'partials/_messages.html' %}
-
                     <div class="mb-2">
                         
                         <input placeholder="Username" type="text" name="username" id="usernameField" class="input form-control" value="{{fieldValues.username}}" required />
@@ -49,7 +48,6 @@
             
         </div>
     </div>
-    <div class="col-md-4"></div>
 </div>
 
 <script src="{% static 'js/set_newpassword.js' %}"></script>
