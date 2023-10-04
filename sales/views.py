@@ -391,12 +391,12 @@ def productuploadcsv(request):
         for x in csv_data[1:-1]:
             data = x.split(",")
             data[1] = data[1].rstrip("\r")
-            print(x)
+            # print(x)
             print(data)
             print(data[0])
             print(data[1])
-            print(ProductUnit.objects.all())
-            print(ProductUnit.objects.filter(name=data[1]))
+            # print(ProductUnit.objects.all())
+            # print(ProductUnit.objects.filter(name=data[1]))
 
             # create = Products.objects.update_or_create(
             #     name=data[0],
