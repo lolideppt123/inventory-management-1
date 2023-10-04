@@ -20,9 +20,9 @@
 
                 <form action="{% url 'login' %}" method="post" class="login-form">
                     {% csrf_token %}
-                    {% include 'partials/_messages.html' %}
+
                     <div class="mb-2">
-                        
+                        {% include 'partials/_messages.html' %}
                         <input placeholder="Username" type="text" name="username" id="usernameField" class="input form-control" value="{{fieldValues.username}}" required />
                         <i data-feather="user"></i>
                     </div>
