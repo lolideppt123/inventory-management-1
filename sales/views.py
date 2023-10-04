@@ -395,7 +395,8 @@ def productuploadcsv(request):
             print(data)
             print(data[0])
             print(data[1])
-            print(ProductUnit.objects.get(name="KG"))
+            print(ProductUnit.objects.all())
+            print(ProductUnit.objects.filter(name=data[1]))
 
             # create = Products.objects.update_or_create(
             #     name=data[0],
