@@ -1,5 +1,4 @@
 from django.shortcuts import render
-from expenses.models import Expense
 from django.contrib.auth.decorators import login_required
 
 # Create your views here.
