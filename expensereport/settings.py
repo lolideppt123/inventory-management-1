@@ -49,12 +49,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
-    'expenses', # name in the apps.py 
     'authentication', # name in the apps.py
     'userpreferences', # name in the apps.py
-    'income',
     'dashboard',
-    'purchases',
     'sales',
     'inventory',
     'rest_framework', #Serializers
